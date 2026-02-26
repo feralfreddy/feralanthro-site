@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing — The Feral Anthropologist</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+:root {
+  --bg: #0e0c07;
+  --paper: #f0ead6;
+  --red: #c41e1e;
+  --brown: #8b7355;
+  --gold: #c8a84b;
+  --muted: #4a4535;
+  --text: #f0ead6;
+  --border: rgba(240,234,214,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Mono', monospace; min-height: 100vh; }
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 1000;
+}
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 48px; height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: rgba(14,12,7,0.95); backdrop-filter: blur(12px);
+}
+
+.nav-logo { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-style: italic; color: var(--paper); text-decoration: none; }
+.nav-logo span { color: var(--red); }
+.nav-links { display: flex; gap: 32px; }
+.nav-links a { font-size: 0.58rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+.nav-links a:hover { color: var(--paper); }
+.nav-links a.active { color: var(--paper); }
+
+.page { padding-top: 56px; }
+
+/* WRITING HEADER */
+.writing-header {
+  padding: 80px 56px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+}
+
+.writing-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -2px;
+  color: var(--paper);
+}
+
+.writing-header h1 em { font-style: italic; color: var(--gold); }
+
+.writing-header-right {
+  max-width: 380px;
+}
+
+.writing-desc {
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  text-decoration: none;
+  transition: all 0.15s;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary { background: var(--red); color: var(--paper); }
+.btn-primary:hover { background: #a01818; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.btn-outline:hover { border-color: var(--paper); color: var(--paper); }
+.btn-gold { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+.btn-gold:hover { background: rgba(200,168,75,0.1); }
+
+.sec-label {
+  font-size: 0.55rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* SUBSTACK EMBED SECTION */
+.substack-section {
+  padding: 60px 56px;
+  border-bottom: 1px solid var(--border);
+}
+
+.substack-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 48px;
+  align-items: start;
+}
+
+/* Recent posts — manual until RSS is connected */
+.posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.post-item {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 24px;
+  align-items: start;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.15s;
+}
+
+.post-item:first-child { padding-top: 0; }
+.post-item:last-child { border-bottom: none; }
+.post-item:hover .post-title { color: var(--gold); }
+
+.post-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: rgba(240,234,214,0.06);
+  line-height: 1;
+  text-align: right;
+  padding-top: 4px;
+}
+
+.post-tag {
+  font-size: 0.52rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 6px;
+}
+
+.post-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--paper);
+  margin-bottom: 8px;
+  line-height: 1.3;
+  transition: color 0.15s;
+}
+
+.post-excerpt {
+  font-size: 0.65rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.post-meta {
+  font-size: 0.55rem;
+  color: rgba(74,69,53,0.7);
+  letter-spacing: 1px;
+}
+
+/* Sidebar */
+.writing-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 80px;
+}
+
+.sidebar-card {
+  background: rgba(240,234,214,0.04);
+  border: 1px solid var(--border);
+  padding: 24px;
+}
+
+.sidebar-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.sidebar-card p {
+  font-size: 0.62rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.sidebar-card .btn { width: 100%; text-align: center; display: block; }
+
+/* TOPICS */
+.topics-section {
+  padding: 60px 56px;
+  border-bottom: 1px solid var(--border);
+}
+
+.topics-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.topic-pill {
+  font-size: 0.6rem;
+  padding: 8px 18px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: default;
+  transition: all 0.15s;
+}
+
+.topic-pill:hover { border-color: var(--paper); color: var(--paper); }
+.topic-pill.featured { border-color: var(--red); color: var(--red); }
+
+footer {
+  padding: 28px 56px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.55rem;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+}
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--paper); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.writing-header { animation: fadeUp 0.6s ease forwards; }
+
+@media (max-width: 900px) {
+  .writing-header { flex-direction: column; align-items: flex-start; }
+  .substack-layout { grid-template-columns: 1fr; }
+  .writing-sidebar { position: static; }
+  nav { padding: 0 20px; }
+  .nav-links { gap: 16px; }
+  .writing-header, .substack-section, .topics-section { padding-left: 24px; padding-right: 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">The <span>Feral</span> Anthropologist</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="research.html">Research</a>
+    <a href="zine.html">Field Notes</a>
+    <a href="writing.html" class="active">Writing</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="writing-header">
+    <h1>Essays<br>& <em>Writing</em></h1>
+    <div class="writing-header-right">
+      <p class="writing-desc">Longer-form thinking on anthropology, resistance, food systems, astrology, and what it means to build knowledge from the margins. Published on Substack — subscribe to get new essays in your inbox.</p>
+      <a href="https://substack.com" target="_blank" class="btn btn-primary">Subscribe on Substack →</a>
+    </div>
+  </div>
+
+  <div class="substack-section">
+    <div class="sec-label">// Recent Essays</div>
+    <div class="substack-layout">
+
+      <div class="posts-list">
+
+        <a href="https://substack.com" target="_blank" class="post-item">
+          <div class="post-num">01</div>
+          <div>
+            <div class="post-tag">Field Notes</div>
+            <div class="post-title">Why I Made a Zine About ICE Abolition</div>
+            <div class="post-excerpt">The thinking behind Field Notes Issue 01 — what community building actually looks like when institutions fail, and why anthropology has something to say about it.</div>
+            <div class="post-meta">Add your Substack posts here</div>
+          </div>
+        </a>
+
+        <a href="https://substack.com" target="_blank" class="post-item">
+          <div class="post-num">02</div>
+          <div>
+            <div class="post-tag">Anthropology</div>
+            <div class="post-title">Astrology Is Not Pseudoscience — It's a Colonized Knowledge System</div>
+            <div class="post-excerpt">The argument that runs through everything I do: that what gets called "legitimate" knowledge is a product of power, not truth.</div>
+            <div class="post-meta">Add your Substack posts here</div>
+          </div>
+        </a>
+
+        <a href="https://substack.com" target="_blank" class="post-item">
+          <div class="post-num">03</div>
+          <div>
+            <div class="post-tag">Food Politics</div>
+            <div class="post-title">The Honey Index: What Beekeeping Tells Us About a Community's Health</div>
+            <div class="post-excerpt">A public-facing version of my current grad research — how small-scale apiculture functions as an early warning system for food system collapse.</div>
+            <div class="post-meta">Add your Substack posts here</div>
+          </div>
+        </a>
+
+        <a href="https://substack.com" target="_blank" class="post-item">
+          <div class="post-num">04</div>
+          <div>
+            <div class="post-tag">Folklore</div>
+            <div class="post-title">Punk as a Living Folklore System</div>
+            <div class="post-excerpt">Notes from my current graduate research — why punk is not a genre but a vernacular cosmology, and what that means for how we study it.</div>
+            <div class="post-meta">Add your Substack posts here</div>
+          </div>
+        </a>
+
+      </div>
+
+      <div class="writing-sidebar">
+        <div class="sidebar-card">
+          <h4>Subscribe on Substack</h4>
+          <p>New essays when there's something worth saying. No filler. Covers anthropology, folklore, food politics, astrology, and community organizing.</p>
+          <a href="https://substack.com" target="_blank" class="btn btn-gold">Subscribe Free →</a>
+        </div>
+        <div class="sidebar-card">
+          <h4>Support on Ko-fi</h4>
+          <p>Paid supporters get early access to essays, zine drafts, and research notes before they're published anywhere.</p>
+          <a href="https://ko-fi.com" target="_blank" class="btn btn-outline">Ko-fi →</a>
+        </div>
+        <div class="sidebar-card">
+          <h4>Field Notes Zine</h4>
+          <p>The writing that goes beyond essays — raw, political, designed for community use. Issue 01 out now.</p>
+          <a href="zine.html" class="btn btn-primary">Read Now →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Topics -->
+  <div class="topics-section">
+    <div class="sec-label">// Topics</div>
+    <div class="topics-grid">
+      <div class="topic-pill featured">ICE Abolition</div>
+      <div class="topic-pill featured">Epistemic Decolonization</div>
+      <div class="topic-pill featured">Food Politics</div>
+      <div class="topic-pill">Folklore</div>
+      <div class="topic-pill">Forensic Anthropology</div>
+      <div class="topic-pill">Astrology</div>
+      <div class="topic-pill">Community Organizing</div>
+      <div class="topic-pill">Death Rituals</div>
+      <div class="topic-pill">Punk Culture</div>
+      <div class="topic-pill">Honey Index</div>
+      <div class="topic-pill">Military Life</div>
+      <div class="topic-pill">Globalization</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>© The Feral Anthropologist — Writing</span>
+  <div style="display:flex;gap:24px;">
+    <a href="https://substack.com" target="_blank">Substack</a>
+    <a href="https://ko-fi.com" target="_blank">Ko-fi</a>
+    <a href="https://instagram.com" target="_blank">Instagram</a>
+  </div>
+</footer>
+
+</body>
+</html>

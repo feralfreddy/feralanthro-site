@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Notes — The Feral Anthropologist</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+:root {
+  --bg: #0e0c07;
+  --paper: #f0ead6;
+  --red: #c41e1e;
+  --brown: #8b7355;
+  --gold: #c8a84b;
+  --muted: #4a4535;
+  --text: #f0ead6;
+  --border: rgba(240,234,214,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Mono', monospace; min-height: 100vh; }
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 1000;
+}
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 48px; height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: rgba(14,12,7,0.95); backdrop-filter: blur(12px);
+}
+
+.nav-logo { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-style: italic; color: var(--paper); text-decoration: none; }
+.nav-logo span { color: var(--red); }
+.nav-links { display: flex; gap: 32px; }
+.nav-links a { font-size: 0.58rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+.nav-links a:hover { color: var(--paper); }
+.nav-links a.active { color: var(--paper); }
+
+.page { padding-top: 56px; }
+
+/* ZINE HEADER */
+.zine-header {
+  padding: 80px 56px;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.zine-header::before {
+  content: 'FIELD NOTES';
+  position: absolute;
+  font-family: 'Playfair Display', serif;
+  font-size: 18vw;
+  font-weight: 900;
+  color: rgba(240,234,214,0.02);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: -4px;
+}
+
+.zine-title-block h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -2px;
+  color: var(--paper);
+  margin-bottom: 16px;
+}
+
+.zine-title-block h1 em { font-style: italic; color: var(--red); }
+
+.zine-tagline {
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+  max-width: 400px;
+}
+
+.issue-tag {
+  display: inline-block;
+  font-size: 0.55rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border: 1px solid var(--red);
+  color: var(--red);
+  margin-bottom: 20px;
+}
+
+/* ISSUE CARD */
+.issue-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.issue-card-hero {
+  background: rgba(196,30,30,0.08);
+  border: 1px solid rgba(196,30,30,0.25);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.issue-card-hero::before {
+  content: '01';
+  position: absolute;
+  bottom: -20px; right: -10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 12rem;
+  font-weight: 900;
+  color: rgba(196,30,30,0.08);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.issue-number {
+  font-size: 0.55rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 16px;
+}
+
+.issue-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-style: italic;
+  color: var(--paper);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.issue-desc {
+  font-size: 0.68rem;
+  color: rgba(240,234,214,0.55);
+  line-height: 1.8;
+  margin-bottom: 28px;
+}
+
+.issue-meta {
+  display: flex;
+  gap: 24px;
+  font-size: 0.58rem;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  text-decoration: none;
+  transition: all 0.15s;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary { background: var(--red); color: var(--paper); }
+.btn-primary:hover { background: #a01818; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.btn-outline:hover { border-color: var(--paper); color: var(--paper); }
+
+.btn-wrap { display: flex; gap: 12px; align-items: center; }
+
+.price-note {
+  font-size: 0.6rem;
+  color: var(--muted);
+  align-self: center;
+}
+
+/* ABOUT SERIES */
+.about-series {
+  padding: 80px 56px;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 60px;
+}
+
+.series-label {
+  font-size: 0.55rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  position: sticky;
+  top: 80px;
+}
+
+.series-label strong {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-style: italic;
+  color: var(--paper);
+  font-weight: 900;
+  letter-spacing: -1px;
+  margin-top: 8px;
+  line-height: 1.1;
+}
+
+.series-content p {
+  font-size: 0.72rem;
+  color: rgba(240,234,214,0.6);
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+
+/* UPCOMING */
+.upcoming-section {
+  padding: 80px 56px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sec-label {
+  font-size: 0.55rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.upcoming-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.upcoming-card {
+  background: rgba(240,234,214,0.03);
+  border: 1px solid var(--border);
+  padding: 24px;
+  opacity: 0.6;
+  position: relative;
+}
+
+.upcoming-card::after {
+  content: 'FORTHCOMING';
+  position: absolute;
+  top: 12px; right: 12px;
+  font-size: 0.48rem;
+  letter-spacing: 2px;
+  color: var(--muted);
+}
+
+.uc-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: rgba(240,234,214,0.08);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.uc-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--paper);
+  margin-bottom: 6px;
+}
+
+.uc-topic {
+  font-size: 0.6rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* SUPPORT */
+.support-section {
+  padding: 60px 56px;
+  background: rgba(200,168,75,0.04);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.support-text h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.support-text p {
+  font-size: 0.68rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 500px;
+}
+
+footer {
+  padding: 28px 56px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.55rem;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+}
+
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--paper); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.zine-title-block { animation: fadeUp 0.6s ease forwards; }
+.issue-showcase { animation: fadeUp 0.6s 0.15s ease forwards; opacity: 0; }
+
+@media (max-width: 900px) {
+  .zine-header, .about-series { grid-template-columns: 1fr; }
+  nav { padding: 0 20px; }
+  .nav-links { gap: 16px; }
+  .zine-header, .about-series, .upcoming-section, .support-section { padding-left: 24px; padding-right: 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">The <span>Feral</span> Anthropologist</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="research.html">Research</a>
+    <a href="zine.html" class="active">Field Notes</a>
+    <a href="writing.html">Writing</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="zine-header">
+    <div class="zine-title-block">
+      <div class="issue-tag">Zine Series</div>
+      <h1><em>Field</em><br>Notes</h1>
+      <p class="zine-tagline">A zine series published by The Feral Anthropologist. Community-rooted, politically honest, written for everyday people — not academic audiences.</p>
+    </div>
+
+    <div class="issue-showcase">
+      <div class="issue-card-hero">
+        <div class="issue-number">// Issue 01 — Now Available</div>
+        <div class="issue-title">Abolish ICE &<br>How We Hold<br>Each Other</div>
+        <div class="issue-desc">Focused, accessible tools for community building in the face of immigration enforcement. This issue is about what abolition actually looks like on the ground — and how everyday people build networks of protection and care.</div>
+        <div class="issue-meta">
+          <span>Digital Zine</span>
+          <span>Pay What You Want</span>
+          <span>Min. $3</span>
+        </div>
+        <div class="btn-wrap">
+          <a href="https://ko-fi.com" target="_blank" class="btn btn-primary">Get Issue 01 — Ko-fi</a>
+          <span class="price-note">from $3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About the Series -->
+  <div class="about-series">
+    <div class="series-label">
+      // About
+      <strong>The Series</strong>
+    </div>
+    <div class="series-content">
+      <p>Field Notes is a zine series that takes anthropological thinking and makes it useful. Not just theoretical — actionable. Each issue tackles one specific political or community topic from the ground up, combining research, personal perspective, and practical tools.</p>
+      <p>The name comes from ethnographic field notes — the raw, honest observations made outside institutional walls. That's what this series is: notes from the field, for people living in it.</p>
+      <p>Issues are pay-what-you-want with a $3 minimum. If you can pay more, you're supporting future issues and keeping this accessible to people who can't.</p>
+    </div>
+  </div>
+
+  <!-- Upcoming Issues -->
+  <div class="upcoming-section">
+    <div class="sec-label">// Forthcoming Issues</div>
+    <div class="upcoming-grid">
+      <div class="upcoming-card">
+        <div class="uc-num">02</div>
+        <div class="uc-title">TBD</div>
+        <div class="uc-topic">Next issue in development. Follow on Substack or Ko-fi for announcements.</div>
+      </div>
+      <div class="upcoming-card">
+        <div class="uc-num">03</div>
+        <div class="uc-title">TBD</div>
+        <div class="uc-topic">Research in progress.</div>
+      </div>
+      <div class="upcoming-card">
+        <div class="uc-num">04</div>
+        <div class="uc-title">TBD</div>
+        <div class="uc-topic">Research in progress.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Support -->
+  <div class="support-section">
+    <div class="support-text">
+      <h3>Support the work on Ko-fi</h3>
+      <p>Buy individual issues or become a supporter to get early access, behind-the-scenes research notes, and discounts on future issues. Everything helps keep this series going.</p>
+    </div>
+    <a href="https://ko-fi.com" target="_blank" class="btn btn-outline">Visit Ko-fi →</a>
+  </div>
+
+</div>
+
+<footer>
+  <span>© The Feral Anthropologist — Field Notes Zine Series</span>
+  <div style="display:flex;gap:24px;">
+    <a href="https://substack.com" target="_blank">Substack</a>
+    <a href="https://ko-fi.com" target="_blank">Ko-fi</a>
+    <a href="https://instagram.com" target="_blank">Instagram</a>
+  </div>
+</footer>
+
+</body>
+</html>

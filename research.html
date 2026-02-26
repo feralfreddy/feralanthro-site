@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FERAL — Anthropology Research Graph</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;1,300;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+  :root {
+    --bg: #0d0f0a;
+    --accent1: #b5e853;
+    --accent2: #e8c84a;
+    --accent3: #e85353;
+    --accent4: #53d0e8;
+    --accent5: #c853e8;
+    --accent6: #e87a53;
+    --text: #dde8cc;
+    --muted: #4a5c38;
+    --card: rgba(181,232,83,0.04);
+    --border: rgba(181,232,83,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    background-image: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(181,232,83,0.06) 0%, transparent 70%);
+  }
+
+  /* LOADING */
+  #loading {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    gap: 20px;
+  }
+
+  .load-title {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--accent1);
+  }
+
+  .load-bar {
+    width: 200px;
+    height: 2px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .load-bar::after {
+    content: '';
+    position: absolute;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--accent1);
+    animation: slide 1.2s ease-in-out infinite;
+  }
+
+  @keyframes slide { to { left: 100%; } }
+
+  .load-status {
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+
+  /* CONFIG BANNER */
+  #config-banner {
+    background: rgba(232,200,74,0.1);
+    border-bottom: 1px solid rgba(232,200,74,0.3);
+    padding: 12px 56px;
+    font-size: 0.65rem;
+    color: var(--accent2);
+    display: none;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #config-banner a { color: var(--accent2); text-decoration: underline; cursor: pointer; }
+
+  #sheet-url-input {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(232,200,74,0.3);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    padding: 6px 12px;
+    width: 480px;
+    outline: none;
+  }
+
+  #sheet-url-input:focus { border-color: var(--accent2); }
+
+  .btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    padding: 7px 16px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: none;
+    text-transform: uppercase;
+    transition: opacity 0.15s;
+  }
+  .btn:hover { opacity: 0.8; }
+  .btn-amber { background: var(--accent2); color: var(--bg); }
+  .btn-green { background: var(--accent1); color: var(--bg); }
+  .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+
+  /* HEADER */
+  header {
+    padding: 40px 56px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .logo-wrap h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--accent1);
+    line-height: 1;
+  }
+
+  .logo-wrap p {
+    font-size: 0.58rem;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .header-stats { display: flex; gap: 28px; }
+  .hstat { text-align: center; }
+  .hstat-n { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 700; color: var(--accent2); line-height: 1; display: block; }
+  .hstat-l { font-size: 0.52rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+  /* CONTROLS */
+  .controls {
+    padding: 20px 56px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  input[type=text] {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    padding: 9px 16px;
+    outline: none;
+    width: 240px;
+    transition: border-color 0.2s;
+  }
+  input[type=text]:focus { border-color: var(--accent1); }
+  input[type=text]::placeholder { color: var(--muted); }
+
+  .tab {
+    font-size: 0.58rem;
+    padding: 7px 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: transparent;
+    transition: all 0.15s;
+  }
+  .tab:hover { color: var(--text); border-color: var(--muted); }
+  .tab.active { background: var(--accent1); color: var(--bg); border-color: var(--accent1); font-weight: 700; }
+
+  .last-updated {
+    margin-left: auto;
+    font-size: 0.55rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* MAIN */
+  .main { padding: 36px 56px 60px; }
+
+  .sec-label {
+    font-size: 0.56rem;
+    color: var(--muted);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* VIEWS */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* CLUSTERS */
+  .clusters {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .cluster {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .cluster:hover { transform: translateY(-2px); border-color: rgba(181,232,83,0.25); }
+
+  .cluster::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px; width: 100%;
+  }
+
+  .cluster-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .cluster-icon { font-size: 1.3rem; }
+
+  .cluster-title {
+    font-family: 'Fraunces', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-style: italic;
+  }
+
+  .cluster-count { margin-left: auto; font-size: 0.55rem; color: var(--muted); }
+
+  .leaf-list { display: flex; flex-direction: column; gap: 5px; }
+
+  .leaf {
+    font-size: 0.65rem;
+    padding: 7px 11px;
+    background: rgba(255,255,255,0.03);
+    border-left: 2px solid rgba(255,255,255,0.08);
+    color: var(--text);
+    line-height: 1.5;
+    transition: all 0.12s;
+    cursor: default;
+  }
+  .leaf:hover { background: rgba(255,255,255,0.06); border-left-color: var(--accent1); }
+  .leaf.match { border-left-color: var(--accent2); background: rgba(232,200,74,0.08); color: var(--accent2); }
+
+  .leaf .leaf-meta { display: block; font-size: 0.55rem; color: var(--muted); margin-top: 2px; }
+
+  /* PAPERS */
+  .paper-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+
+  .paper-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 22px;
+    transition: border-color 0.15s;
+  }
+  .paper-card:hover { border-color: rgba(181,232,83,0.3); }
+
+  .paper-title {
+    font-family: 'Fraunces', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--accent1);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .paper-status {
+    font-size: 0.55rem;
+    padding: 3px 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 11px;
+    display: inline-block;
+  }
+  .status-active { background: rgba(181,232,83,0.15); color: var(--accent1); }
+  .status-concept { background: rgba(232,200,74,0.15); color: var(--accent2); }
+  .status-outline { background: rgba(83,208,232,0.15); color: var(--accent4); }
+
+  .paper-desc { font-size: 0.65rem; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+
+  .paper-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag { font-size: 0.55rem; padding: 2px 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: var(--muted); }
+
+  /* METHODS / THEORY */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+
+  .item-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .item-name {
+    font-family: 'Fraunces', serif;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--accent4);
+    margin-bottom: 8px;
+  }
+  .item-name.theory-name { color: var(--accent5); }
+
+  .item-body { font-size: 0.64rem; color: var(--muted); line-height: 1.7; }
+
+  /* INSIGHTS */
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 10px;
+    margin-top: 32px;
+    padding: 24px;
+    background: rgba(181,232,83,0.04);
+    border: 1px solid rgba(181,232,83,0.12);
+  }
+
+  .insight {
+    font-size: 0.65rem;
+    padding: 10px 14px;
+    border-left: 2px solid var(--accent1);
+    color: var(--text);
+    line-height: 1.6;
+    background: rgba(0,0,0,0.2);
+  }
+  .insight strong { color: var(--accent1); }
+
+  /* ADD FORM */
+  #add-panel {
+    position: fixed;
+    top: 0; right: -480px;
+    width: 480px;
+    height: 100vh;
+    background: #0f1209;
+    border-left: 1px solid var(--border);
+    z-index: 100;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    padding: 32px;
+  }
+  #add-panel.open { right: 0; }
+
+  .panel-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--accent1);
+    margin-bottom: 24px;
+  }
+
+  .form-group { margin-bottom: 16px; }
+
+  .form-label {
+    display: block;
+    font-size: 0.58rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    padding: 9px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent1); }
+  .form-textarea { resize: vertical; min-height: 80px; }
+  .form-select option { background: #0f1209; }
+
+  .form-row { display: flex; gap: 10px; }
+  .form-row .form-group { flex: 1; }
+
+  .panel-actions { display: flex; gap: 10px; margin-top: 24px; }
+
+  .copy-hint {
+    margin-top: 16px;
+    padding: 12px;
+    background: rgba(181,232,83,0.06);
+    border: 1px solid var(--border);
+    font-size: 0.62rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .copy-hint strong { color: var(--accent1); display: block; margin-bottom: 4px; }
+  .copy-hint code {
+    display: block;
+    background: rgba(0,0,0,0.3);
+    padding: 6px 10px;
+    margin-top: 8px;
+    font-size: 0.58rem;
+    color: var(--text);
+    word-break: break-all;
+    line-height: 1.5;
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99;
+    display: none;
+  }
+  .overlay.show { display: block; }
+
+  /* Color coding by category */
+  .cat-Folklore .cluster-title, .cat-Folklore .leaf-meta { color: var(--accent1); }
+  .cat-Folklore::after { background: var(--accent1); }
+  .cat-Forensic .cluster-title { color: var(--accent3); }
+  .cat-Forensic::after { background: var(--accent3); }
+  .cat-Food .cluster-title { color: var(--accent2); }
+  .cat-Food::after { background: var(--accent2); }
+  .cat-AstroAnthro .cluster-title { color: var(--accent5); }
+  .cat-AstroAnthro::after { background: var(--accent5); }
+  .cat-Methods .cluster-title { color: var(--accent4); }
+  .cat-Methods::after { background: var(--accent4); }
+  .cat-Theory .cluster-title { color: var(--accent6); }
+  .cat-Theory::after { background: var(--accent6); }
+
+  .empty-state {
+    padding: 60px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.7rem;
+  }
+</style>
+</head>
+<body>
+<style>
+.site-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 0 48px; height: 44px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(13,15,10,0.98); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(181,232,83,0.15);
+  font-family: IBM Plex Mono, Space Mono, monospace;
+}
+.site-nav a.snl { font-family: Georgia, serif; font-style: italic; font-size: 0.85rem; color: #f0ead6; text-decoration: none; }
+.site-nav a.snl span { color: #c41e1e; }
+.site-nav-links { display: flex; gap: 28px; }
+.site-nav-links a { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: #4a5c38; text-decoration: none; transition: color 0.15s; }
+.site-nav-links a:hover { color: #dde8cc; }
+.site-nav-links a.active { color: #dde8cc; }
+header { margin-top: 44px !important; }
+</style>
+<div class="site-nav">
+  <a href="index.html" class="snl">The <span>Feral</span> Anthropologist</a>
+  <div class="site-nav-links">
+    <a href="index.html">Home</a>
+    <a href="research.html" class="active">Research</a>
+    <a href="zine.html">Field Notes</a>
+    <a href="writing.html">Writing</a>
+  </div>
+</div>
+
+<!-- Loading -->
+<div id="loading">
+  <div class="load-title">Anthropology</div>
+  <div class="load-bar"></div>
+  <div class="load-status" id="load-status">LOADING RESEARCH DATA...</div>
+</div>
+
+<!-- Config banner (shows if no sheet connected) -->
+<div id="config-banner">
+  <span>⚡ Connect your Google Sheet to make this auto-update:</span>
+  <input id="sheet-url-input" type="text" placeholder="Paste your Google Sheets CSV URL here..." />
+  <button class="btn btn-amber" onclick="saveSheetUrl()">Connect</button>
+  <button class="btn btn-ghost" onclick="dismissBanner()">Use built-in data</button>
+</div>
+
+<header>
+  <div class="logo-wrap">
+    <h1>Anthropology</h1>
+    <p>Nathan // Research Knowledge Graph</p>
+  </div>
+  <div class="header-right">
+    <div class="header-stats">
+      <div class="hstat"><span class="hstat-n" id="stat-nodes">—</span><span class="hstat-l">Nodes</span></div>
+      <div class="hstat"><span class="hstat-n" id="stat-papers">—</span><span class="hstat-l">Papers</span></div>
+      <div class="hstat"><span class="hstat-n" id="stat-cats">—</span><span class="hstat-l">Subfields</span></div>
+    </div>
+    <button class="btn btn-green" onclick="openAddPanel()">+ Add Node</button>
+  </div>
+</header>
+
+<div class="controls">
+  <input type="text" placeholder="Search all nodes..." id="searchInput" />
+  <div class="tab active" data-view="map">Research Map</div>
+  <div class="tab" data-view="papers">Papers</div>
+  <div class="tab" data-view="methods">Methods</div>
+  <div class="tab" data-view="theory">Theory</div>
+  <div class="tab" data-view="insights">Insights</div>
+  <div class="last-updated" id="last-updated"></div>
+</div>
+
+<div class="main">
+  <div id="view-map" class="view active"></div>
+  <div id="view-papers" class="view"></div>
+  <div id="view-methods" class="view"></div>
+  <div id="view-theory" class="view"></div>
+  <div id="view-insights" class="view"></div>
+</div>
+
+<!-- Add Node Panel -->
+<div class="overlay" id="overlay" onclick="closeAddPanel()"></div>
+<div id="add-panel">
+  <div class="panel-title">Add New Node</div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label class="form-label">Category</label>
+      <select class="form-select" id="f-category">
+        <option>Folklore</option>
+        <option>Forensic</option>
+        <option>Food</option>
+        <option>AstroAnthro</option>
+        <option>Methods</option>
+        <option>Theory</option>
+        <option>Insight</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Type</label>
+      <select class="form-select" id="f-type">
+        <option>leaf</option>
+        <option>paper</option>
+        <option>method</option>
+        <option>theory</option>
+        <option>insight</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Subfield Label</label>
+    <input class="form-input" type="text" id="f-subfield" placeholder="e.g. Folklore, Honey Index..." />
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Title</label>
+    <input class="form-input" type="text" id="f-title" placeholder="Short concept or paper title" />
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Description</label>
+    <textarea class="form-textarea" id="f-description" placeholder="What is this? Why does it matter?"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Meta / Tags</label>
+    <input class="form-input" type="text" id="f-meta" placeholder="key terms / theorists / methods" />
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Status</label>
+    <select class="form-select" id="f-status">
+      <option>active</option>
+      <option>concept</option>
+      <option>outline</option>
+      <option>complete</option>
+    </select>
+  </div>
+
+  <div class="panel-actions">
+    <button class="btn btn-green" onclick="addNode()">Add to Graph</button>
+    <button class="btn btn-ghost" onclick="closeAddPanel()">Cancel</button>
+  </div>
+
+  <div class="copy-hint">
+    <strong>To make this permanent:</strong>
+    After adding a node here it shows immediately. To save it forever connect a Google Sheet — copy this row format and paste it into your sheet:
+    <code>category, subfield, title, description, meta, type, status</code>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA LAYER
+// ============================================================
+
+// Built-in seed data (from ChatGPT export analysis)
+const SEED_DATA = [
+  {category:'Folklore',subfield:'Folklore',title:'Punk culture as living folklore system',description:'Vernacular cosmology — punk as informal belief system transmitted outside institutions',meta:'vernacular cosmology / material culture / oral tradition',type:'leaf',status:'active'},
+  {category:'Folklore',subfield:'Folklore',title:'Ethnographic field notes — bagel shop D.C.',description:'Observed spatial behavior and group formation at NYC-Jewish inspired bagel shop in winter',meta:'CYM 24 JAN / spatial behavior / group formation / identity',type:'leaf',status:'active'},
+  {category:'Folklore',subfield:'Folklore',title:'Contemporary legends + superstitions fieldwork',description:'Midwest family weather proverbs and their practical ecological function in tornado alley',meta:'weather proverbs / farming / flight ops / vernacular forecasting',type:'leaf',status:'active'},
+  {category:'Folklore',subfield:'Folklore',title:'Digital ethnography — Reddit r/punk as field site',description:'Treating online punk community as adjacent room in same cultural building as physical punk scene',meta:'online community / digital field site / participant observation',type:'leaf',status:'active'},
+  {category:'Folklore',subfield:'Folklore',title:'Folklore + Forensic Anthropology intersection',description:'Both systems make meaning of the dead — shared project across disciplines',meta:'forensics / folklore / death systems',type:'leaf',status:'active'},
+  {category:'Forensic',subfield:'Forensic Anthropology',title:'Self-study curriculum — ABFA diplomate path',description:'5-year hybrid plan from basics through diplomate competencies; osteology → taphonomy → trauma',meta:'ABFA / 5-year plan / osteology / taphonomy',type:'leaf',status:'active'},
+  {category:'Forensic',subfield:'Forensic Anthropology',title:'All That Remains — paper concept',description:'Forensic + folklore as dual death systems; American death-phobia as structural and commercial',meta:'paper concept / death-phobia / forensicfolklore.org',type:'paper',status:'concept'},
+  {category:'Forensic',subfield:'Forensic Anthropology',title:'American death-phobia as structural displacement',description:'U.S. death-phobia is not psychological fear — it is commercial and ideological displacement of dying',meta:'cultural critique / funeral industry / death rituals',type:'leaf',status:'active'},
+  {category:'Forensic',subfield:'Forensic Anthropology',title:'Death rituals comparison — cross-cultural',description:'Comparing global death practices to challenge U.S. death-phobic norm',meta:'decolonizing death / cross-cultural / comparative',type:'leaf',status:'active'},
+  {category:'Food',subfield:'Food Politics & Justice',title:'The Honey Index',description:'Apiculture as emergent resilience signal in food system instability. 10-page grad paper outline complete.',meta:'Haraway / CAS / food justice / Detroit / Cuba / Indigenous honey',type:'paper',status:'active'},
+  {category:'Food',subfield:'Food Politics & Justice',title:'Honey as bioindicator for local communities',description:'Going Beyond the Hive — honey as proxy for economic vitality and sociocultural transition',meta:'bioindicator / resilience / economic vitality / local communities',type:'leaf',status:'active'},
+  {category:'Food',subfield:'Food Politics & Justice',title:'Food memory + technology — Sutton',description:'Technological change disrupts embodied sensory knowledge that transmits food traditions across generations',meta:'Sutton / habit memory / embodied knowledge / sensory disruption',type:'leaf',status:'active'},
+  {category:'Food',subfield:'Food Politics & Justice',title:'Anosmia + cooking as theoretical case study',description:'Personal experience of anosmia as rare empirical counterexample to Sutton\'s sensory transmission argument — potential dissertation-level contribution',meta:'Sutton / embodiment / anosmia / sensory loss',type:'leaf',status:'active'},
+  {category:'Food',subfield:'Food Politics & Justice',title:'Lefse cultural analysis',description:'Norwegian-American food as diasporic memory and identity performance',meta:'diasporic food / identity / memory / Norwegian-American',type:'leaf',status:'active'},
+  {category:'AstroAnthro',subfield:'Astrology × Anthropology',title:'Astrology as Resistance — thesis outline',description:'Astrology as delegitimized non-Western knowledge system. Core NAOS intellectual brand AND academic argument.',meta:'epistemic decolonization / Foucault / NRMs / counter-hegemonic',type:'paper',status:'outline'},
+  {category:'AstroAnthro',subfield:'Astrology × Anthropology',title:'NRMs cults and legitimacy',description:'Where does astrology sit on the spectrum of belief systems vs religious movements vs cults?',meta:'NRMs / legitimacy / belief systems / Srinivas',type:'leaf',status:'active'},
+  {category:'AstroAnthro',subfield:'Astrology × Anthropology',title:'Ifa Geomancy Millenarianism comparison',description:'Non-Western divination as legitimate epistemic practice — comparative framework',meta:'Ifa / geomancy / divination / non-Western epistemology',type:'leaf',status:'active'},
+  {category:'AstroAnthro',subfield:'Astrology × Anthropology',title:'Christianity as Foucauldian power structure',description:'Why some belief systems get legitimized and others marginalized — discourse analysis',meta:'Foucault / power / discourse / epistemology',type:'leaf',status:'active'},
+  {category:'AstroAnthro',subfield:'Astrology × Anthropology',title:'Methods proposal — queer and Gen Z astrology',description:'Graduate methods class proposal. Single method: interviews. Research question on queer communities and Gen Z engaging with astrology.',meta:'interviews / queer studies / Gen Z / belief systems',type:'paper',status:'active'},
+  {category:'Methods',subfield:'Methods',title:'Ethnographic observation',description:'Core fieldwork across multiple assignments. Developing skill: moving from spatial description to folkloric texture — meaning, symbols, micro-rituals.',meta:'field notes / ethnography / participant observation',type:'method',status:'active'},
+  {category:'Methods',subfield:'Methods',title:'Digital ethnography',description:'Reddit as field site. Social media as data. Tumblr as public-facing brand-ethnography hybrid.',meta:'digital / Reddit / Tumblr / online community',type:'method',status:'active'},
+  {category:'Methods',subfield:'Methods',title:'Commodity chain analysis',description:'Applied in food systems and globalization coursework. Gives Honey Index its structural backbone.',meta:'commodity chain / food systems / globalization',type:'method',status:'active'},
+  {category:'Methods',subfield:'Methods',title:'Foucauldian discourse analysis',description:'Applied to Christianity, astrology, and death-phobia. Strongest theoretical tool — binds all three subfields.',meta:'Foucault / discourse / power / legitimacy',type:'method',status:'active'},
+  {category:'Theory',subfield:'Theory & Thinkers',title:'Foucault — power and discourse',description:'What knowledge gets legitimized. Applied to Christianity, astrology, and delegitimized non-Western epistemologies.',meta:'power / discourse / epistemology / legitimacy',type:'theory',status:'active'},
+  {category:'Theory',subfield:'Theory & Thinkers',title:'Donna Haraway — CAS and situated knowledge',description:'Complex adaptive systems + researcher positionality. Honey Index theoretical backbone.',meta:'CAS / situated knowledge / more-than-human / ecology',type:'theory',status:'active'},
+  {category:'Theory',subfield:'Theory & Thinkers',title:'David Sutton — food memory and embodiment',description:'Habit memory and synesthetic transmission of food traditions. Your anosmia is a counterexample.',meta:'habit memory / synesthesia / embodiment / food',type:'theory',status:'active'},
+  {category:'Theory',subfield:'Theory & Thinkers',title:'Bourdieu — symbolic capital',description:'Applied in RE reform paper. Cultural vs social capital in academic vs folk knowledge.',meta:'symbolic capital / cultural capital / field',type:'theory',status:'active'},
+  {category:'Theory',subfield:'Theory & Thinkers',title:'Epistemic decolonization',description:'Through-line across all subfields — folklore, food, forensics, astrology. The real dissertation topic.',meta:'decolonization / non-Western knowledge / colonialism',type:'theory',status:'active'},
+  {category:'Insight',subfield:'Insights',title:'Through-line: one dissertation in four papers',description:'Epistemic decolonization runs through folklore, food, forensics, and astrology. You keep starting new papers when you are circling the same argument.',meta:'dissertation / focus / through-line',type:'insight',status:'active'},
+  {category:'Insight',subfield:'Insights',title:'Strongest concept: The Honey Index',description:'Most original paper. Has quantitative hook (bioindicator) + strong theoretical frame. Protect this one.',meta:'honey / bioindicator / resilience / food justice',type:'insight',status:'active'},
+  {category:'Insight',subfield:'Insights',title:'Underdeveloped: anosmia as theoretical contribution',description:'Mentioned once and moved on. Lived counterexample to Sutton\'s sensory transmission argument. Dissertation-quality contribution.',meta:'anosmia / Sutton / embodiment',type:'insight',status:'active'},
+  {category:'Insight',subfield:'Insights',title:'Risk: spreading too thin across projects',description:'Forensic + Folklore + Food + Astro all need focus. Decide which is the dissertation and subordinate the rest.',meta:'focus / dissertation / priority',type:'insight',status:'active'},
+];
+
+const CLUSTER_CONFIG = {
+  Folklore:    { icon:'🌿', color:'var(--accent1)' },
+  Forensic:    { icon:'🦴', color:'var(--accent3)' },
+  Food:        { icon:'🍯', color:'var(--accent2)' },
+  AstroAnthro: { icon:'☽',  color:'var(--accent5)' },
+  Methods:     { icon:'◈',  color:'var(--accent4)' },
+  Theory:      { icon:'◆',  color:'var(--accent6)' },
+  Insight:     { icon:'⚡', color:'var(--accent1)' },
+};
+
+let allData = [];
+let sessionData = []; // nodes added this session
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', async () => {
+  const savedUrl = localStorage.getItem('sheets_url');
+  const savedData = localStorage.getItem('local_nodes');
+
+  if (savedData) {
+    try { sessionData = JSON.parse(savedData); } catch(e) {}
+  }
+
+  if (savedUrl) {
+    document.getElementById('load-status').textContent = 'FETCHING GOOGLE SHEETS...';
+    try {
+      const csvData = await fetchSheetData(savedUrl);
+      allData = [...csvData, ...sessionData];
+      document.getElementById('last-updated').textContent = 'Live from Google Sheets';
+    } catch(e) {
+      allData = [...SEED_DATA, ...sessionData];
+      document.getElementById('last-updated').textContent = 'Sheet offline — using built-in data';
+    }
+  } else {
+    allData = [...SEED_DATA, ...sessionData];
+    showConfigBanner();
+  }
+
+  render();
+  hideLoading();
+});
+
+async function fetchSheetData(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('fetch failed');
+  const text = await res.text();
+  return parseCSV(text);
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim().replace(/"/g,''));
+  return lines.slice(1).map(line => {
+    const vals = line.match(/(".*?"|[^,]+)(?=,|$)/g) || [];
+    const obj = {};
+    headers.forEach((h, i) => {
+      obj[h] = (vals[i] || '').replace(/^"|"$/g,'').trim();
+    });
+    return obj;
+  }).filter(r => r.title);
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function render() {
+  updateStats();
+  renderMap();
+  renderPapers();
+  renderMethods();
+  renderTheory();
+  renderInsights();
+}
+
+function updateStats() {
+  const nodes = allData.filter(d => d.type !== 'insight').length;
+  const papers = allData.filter(d => d.type === 'paper').length;
+  const cats = [...new Set(allData.map(d => d.category))].length;
+  document.getElementById('stat-nodes').textContent = nodes;
+  document.getElementById('stat-papers').textContent = papers;
+  document.getElementById('stat-cats').textContent = cats;
+}
+
+function renderMap() {
+  const container = document.getElementById('view-map');
+  const mapData = allData.filter(d => d.type === 'leaf' || d.type === 'paper');
+  const cats = [...new Set(mapData.map(d => d.category))];
+
+  let html = '<div class="sec-label">// Subfield Clusters</div><div class="clusters">';
+
+  cats.forEach(cat => {
+    const items = mapData.filter(d => d.category === cat);
+    const cfg = CLUSTER_CONFIG[cat] || { icon:'◇', color:'var(--text)' };
+    const subfield = items[0]?.subfield || cat;
+
+    html += `<div class="cluster cat-${cat}" style="--cat-color:${cfg.color}">`;
+    html += `<div class="cluster-head">
+      <span class="cluster-icon">${cfg.icon}</span>
+      <span class="cluster-title" style="color:${cfg.color}">${subfield}</span>
+      <span class="cluster-count">${items.length} nodes</span>
+    </div>`;
+    html += '<div class="leaf-list">';
+    items.forEach(item => {
+      html += `<div class="leaf">
+        ${item.title}
+        <span class="leaf-meta">${item.meta || ''}</span>
+      </div>`;
+    });
+    html += '</div></div>';
+  });
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function renderPapers() {
+  const papers = allData.filter(d => d.type === 'paper');
+  let html = '<div class="sec-label">// Active Papers & Concepts</div><div class="paper-grid">';
+
+  if (!papers.length) {
+    html += '<div class="empty-state">No papers yet. Add one with the + Add Node button.</div>';
+  }
+
+  papers.forEach(p => {
+    const statusClass = p.status === 'active' ? 'status-active' : p.status === 'concept' ? 'status-concept' : 'status-outline';
+    const tags = (p.meta || '').split('/').map(t => `<span class="tag">${t.trim()}</span>`).join('');
+    html += `<div class="paper-card">
+      <div class="paper-title">${p.title}</div>
+      <span class="paper-status ${statusClass}">${p.status}</span>
+      <div class="paper-desc">${p.description}</div>
+      <div class="paper-tags">${tags}</div>
+    </div>`;
+  });
+
+  html += '</div>';
+  document.getElementById('view-papers').innerHTML = html;
+}
+
+function renderMethods() {
+  const items = allData.filter(d => d.type === 'method');
+  let html = '<div class="sec-label">// Methods Applied or Studied</div><div class="card-grid">';
+  items.forEach(m => {
+    html += `<div class="item-card">
+      <div class="item-name">${m.title}</div>
+      <div class="item-body">${m.description}</div>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('view-methods').innerHTML = html;
+}
+
+function renderTheory() {
+  const items = allData.filter(d => d.type === 'theory');
+  let html = '<div class="sec-label">// Thinkers & Frameworks</div><div class="card-grid">';
+  items.forEach(t => {
+    html += `<div class="item-card">
+      <div class="item-name theory-name">${t.title}</div>
+      <div class="item-body">${t.description}</div>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('view-theory').innerHTML = html;
+}
+
+function renderInsights() {
+  const items = allData.filter(d => d.type === 'insight' || d.category === 'Insight');
+  let html = '<div class="sec-label">// Research Arc Insights</div><div class="insights-grid">';
+  items.forEach(i => {
+    html += `<div class="insight"><strong>${i.title}</strong>${i.description}</div>`;
+  });
+  html += '</div>';
+  document.getElementById('view-insights').innerHTML = html;
+}
+
+// ============================================================
+// TABS
+// ============================================================
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + tab.dataset.view).classList.add('active');
+  });
+});
+
+// ============================================================
+// SEARCH
+// ============================================================
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('.leaf, .paper-card, .item-card, .insight').forEach(el => {
+    el.classList.toggle('match', q && el.textContent.toLowerCase().includes(q));
+  });
+});
+
+// ============================================================
+// ADD NODE
+// ============================================================
+function openAddPanel() {
+  document.getElementById('add-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function closeAddPanel() {
+  document.getElementById('add-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+function addNode() {
+  const node = {
+    category: document.getElementById('f-category').value,
+    subfield: document.getElementById('f-subfield').value || document.getElementById('f-category').value,
+    title: document.getElementById('f-title').value.trim(),
+    description: document.getElementById('f-description').value.trim(),
+    meta: document.getElementById('f-meta').value.trim(),
+    type: document.getElementById('f-type').value,
+    status: document.getElementById('f-status').value,
+  };
+
+  if (!node.title) { alert('Title is required.'); return; }
+
+  sessionData.push(node);
+  allData.push(node);
+  localStorage.setItem('local_nodes', JSON.stringify(sessionData));
+
+  render();
+  closeAddPanel();
+
+  // Reset form
+  document.getElementById('f-title').value = '';
+  document.getElementById('f-description').value = '';
+  document.getElementById('f-meta').value = '';
+  document.getElementById('f-subfield').value = '';
+}
+
+// ============================================================
+// GOOGLE SHEETS
+// ============================================================
+function showConfigBanner() {
+  document.getElementById('config-banner').style.display = 'flex';
+}
+
+function dismissBanner() {
+  document.getElementById('config-banner').style.display = 'none';
+}
+
+function saveSheetUrl() {
+  const url = document.getElementById('sheet-url-input').value.trim();
+  if (!url.includes('docs.google.com')) {
+    alert('That doesn\'t look like a Google Sheets URL.');
+    return;
+  }
+  // Convert to CSV export URL
+  const csvUrl = url.includes('/export') ? url :
+    url.replace('/edit', '/export?format=csv').replace('/pub', '/export?format=csv');
+  localStorage.setItem('sheets_url', csvUrl);
+  location.reload();
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function hideLoading() {
+  document.getElementById('loading').style.opacity = '0';
+  setTimeout(() => document.getElementById('loading').style.display = 'none', 400);
+}
+
+document.getElementById('loading').style.transition = 'opacity 0.4s';
+</script>
+</body>
+</html>
