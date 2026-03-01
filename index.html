@@ -86,25 +86,29 @@ lanthro<!doctype html>
       padding: 40px 28px 72px;
     }
     /* FERAL full-width, photo bleeds through */
-    .hero-word {
-      position: relative; width: 100%; text-align: center;
-      line-height: .78; letter-spacing: .02em; text-transform: uppercase;
-      font-family: 'Bebas Neue', system-ui, sans-serif;
-      font-size: clamp(140px, 30vw, 520px);
-      color: rgba(242,240,230,.92);
-      mix-blend-mode: screen;
-      user-select: none;
-    }
-    .hero-word .fwrap { position: relative; display: inline-block; }
-    /* "The" — inside the F, rotated vertical */
+.hero-word {
+  position: relative; width: 100%; text-align: center;
+  line-height: .78; letter-spacing: .02em; text-transform: uppercase;
+  font-family: 'Bebas Neue', system-ui, sans-serif;
+  font-size: clamp(140px, 30vw, 520px);
+  color: rgba(242,240,230,.92);
+  user-select: none;
+}
+
+.hero-word .fwrap {
+  position: relative;
+  display: inline-block;
+  mix-blend-mode: screen;
+}
 .hero-the {
   position: absolute; left: 14px; top: 26px;
   transform: rotate(-90deg); transform-origin: left top;
   font-size: 20px; letter-spacing: .18em; text-transform: uppercase;
   color: #070707; white-space: nowrap; pointer-events: none;
+  mix-blend-mode: normal;
+  isolation: isolate;
 }
-    /* "Anthropologist" — centered script overlay like Forwarder over FREIGHT */
-   .hero-script {
+.hero-script {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -114,6 +118,7 @@ lanthro<!doctype html>
   font-weight: 700;
   color: #000000;
   mix-blend-mode: normal;
+  isolation: isolate;
   text-transform: none;
   letter-spacing: 0;
   pointer-events: none;
