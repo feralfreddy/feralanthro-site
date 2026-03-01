@@ -1,522 +1,558 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Feral Anthropologist</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Feral Anthropologist — Fieldwork. Meaning. Documentation.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@500;700&family=Lora:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070707;
+      --black: #0e0e0c;
+      --dark: #131310;
+      --charcoal: #1b1b17;
+      --ash: #262622;
+      --orange: #e84c1e;
+      --orange2: #f06030;
+      --cream: #f2f0e6;
+      --cream2: #c4c0b4;
+      --cream3: #88867e;
+      --gap: 3px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--cream); font-family: 'DM Sans', system-ui, sans-serif; font-weight: 300; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
 
-:root {
-  --bg: #0e0c07;
-  --paper: #f0ead6;
-  --paper2: #e8e0c8;
-  --red: #c41e1e;
-  --brown: #8b7355;
-  --gold: #c8a84b;
-  --muted: #4a4535;
-  --text: #f0ead6;
-  --border: rgba(240,234,214,0.12);
-}
+    /* grain */
+    body::before { content:""; position:fixed; inset:0; pointer-events:none; z-index:999; opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay; }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+    /* ── NAV ── */
+    .nav { position:fixed; inset:0 0 auto 0; height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; background:rgba(7,7,7,.78); backdrop-filter:blur(10px); border-bottom:1px solid rgba(255,255,255,.06); }
+    .brand { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:.1em; color:var(--cream); }
+    .brand span { color:var(--orange); }
+    .nav .links { display:flex; gap:14px; align-items:center; }
+    .nav .links a { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:rgba(242,240,230,.55); padding:8px 10px; border-radius:999px; transition:all .15s; }
+    .nav .links a:hover { color:var(--cream); background:rgba(255,255,255,.06); }
+    .nav .links a.primary { border:1px solid rgba(232,76,30,.45); color:rgba(232,76,30,.95); }
+    .nav .links a.primary:hover { background:rgba(232,76,30,.08); }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'IBM Plex Mono', monospace;
-  min-height: 100vh;
-}
+    /* ── TICKER ── */
+    .ticker { overflow:hidden; padding:9px 0; white-space:nowrap; }
+    .ticker.orange { background:var(--orange); }
+    .ticker.dark { background:var(--charcoal); }
+    .ticker-track { display:inline-flex; animation:tick 30s linear infinite; }
+    .ticker.dark .ticker-track { animation-direction:reverse; animation-duration:22s; }
+    .ticker-track span { font-family:'Bebas Neue',sans-serif; font-size:.8rem; letter-spacing:.16em; padding:0 22px; }
+    .ticker.orange .ticker-track span { color:var(--black); }
+    .ticker.dark .ticker-track span { color:var(--cream3); }
+    .ticker-track span::after { content:'✦'; margin-left:22px; opacity:.4; }
+    @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 1000;
-}
+    /* ══════════════════════════════════════════
+       HERO — exact from working reference file
+    ══════════════════════════════════════════ */
+    .hero {
+      padding-top: 56px;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      align-items: stretch;
+    }
+    .hero-photo {
+      position: absolute; inset: 0;
+      /* SWAP: background: url('assets/hero.jpg') center/cover no-repeat; */
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,.78)),
+        radial-gradient(1200px 600px at 20% 20%, rgba(255,255,255,.12), transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,0));
+      background-size: cover;
+      background-position: center;
+      filter: saturate(.9) contrast(1.05);
+    }
+    .hero-photo::after {
+      content: ""; position: absolute; inset: 0;
+      background: rgba(232,76,30,.78);
+      mix-blend-mode: multiply;
+    }
+    .hero-inner {
+      position: relative; width: 100%;
+      display: grid; place-items: center;
+      padding: 40px 28px 72px;
+    }
+    /* FERAL full-width, photo bleeds through */
+    .hero-word {
+      position: relative; width: 100%; text-align: center;
+      line-height: .78; letter-spacing: .02em; text-transform: uppercase;
+      font-family: 'Bebas Neue', system-ui, sans-serif;
+      font-size: clamp(140px, 30vw, 520px);
+      color: rgba(242,240,230,.92);
+      mix-blend-mode: screen;
+      user-select: none;
+    }
+    .hero-word .fwrap { position: relative; display: inline-block; }
+    /* "The" — inside the F, rotated vertical */
+    .hero-the {
+      position: absolute; left: 14px; top: 26px;
+      transform: rotate(-90deg); transform-origin: left top;
+      font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(242,240,230,.88); white-space: nowrap; pointer-events: none;
+    }
+    /* "Anthropologist" — centered script overlay like Forwarder over FREIGHT */
+    .hero-script {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(34px, 7vw, 96px); font-weight: 700;
+      color: #0b0b0b; mix-blend-mode: overlay;
+      text-transform: none; letter-spacing: 0;
+      pointer-events: none; white-space: nowrap;
+    }
+    .side-rail {
+      position: absolute; top: calc(56px + 18px); right: 18px;
+      display: flex; flex-direction: column; gap: 14px; z-index: 10;
+    }
+    .side-rail .rail {
+      writing-mode: vertical-rl; text-orientation: mixed;
+      font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(242,240,230,.70);
+    }
+    .hero-meta {
+      margin-top: 18px; width: min(1100px, 100%);
+      display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: end;
+    }
+    .hero-blurb { max-width: 560px; font-size: 14px; line-height: 1.8; color: rgba(10,10,10,.85); mix-blend-mode: overlay; }
+    .hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .hero-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 18px; border-radius: 999px; font-size: 11px;
+      letter-spacing: .16em; text-transform: uppercase;
+      border: 1px solid rgba(10,10,10,.35); background: rgba(242,240,230,.14);
+      color: rgba(10,10,10,.85); transition: transform .15s, background .15s;
+    }
+    .hero-pill:hover { transform: translateY(-1px); background: rgba(242,240,230,.22); }
+    .hero-pill.primary { background: rgba(10,10,10,.72); color: rgba(242,240,230,.95); border-color: rgba(10,10,10,.2); }
 
-/* NAV */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 0 48px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  background: rgba(14,12,7,0.95);
-  backdrop-filter: blur(12px);
-}
+    /* ══════════════════════════════════════════
+       3 BARS
+    ══════════════════════════════════════════ */
+    .bars { background: var(--bg); padding: var(--gap); display: flex; flex-direction: column; gap: var(--gap); }
+    .bar { display: grid; gap: var(--gap); background: var(--bg); }
 
-.nav-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.9rem;
-  font-style: italic;
-  color: var(--paper);
-  text-decoration: none;
-}
+    /* shared panel */
+    .panel { border: 1px solid rgba(255,255,255,.06); background: #0c0c0c; position: relative; overflow: hidden; }
+    .pad { padding: 32px 28px; }
+    .kicker { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: rgba(242,240,230,.55); display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .kicker::before { content: ""; width: 26px; height: 1px; background: rgba(242,240,230,.35); }
+    .h3 { margin: 0 0 14px; font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .04em; color: var(--cream); }
+    .p { margin: 0; font-size: 13px; line-height: 1.9; color: rgba(242,240,230,.72); }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 999px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; border: 1px solid rgba(242,240,230,.18); background: rgba(242,240,230,.05); color: rgba(242,240,230,.92); transition: transform .15s, background .15s; }
+    .btn:hover { transform: translateY(-1px); background: rgba(242,240,230,.1); }
+    .btn.accent { border-color: rgba(232,76,30,.55); color: rgba(232,76,30,.95); }
 
-.nav-logo span { color: var(--red); }
+    /* BAR 1 — copy | stacked type | photo */
+    .bar1 { grid-template-columns: 1.05fr .9fr 1.05fr; min-height: 520px; }
+    .stack-word {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; font-family: 'Bebas Neue', sans-serif;
+      line-height: .72; letter-spacing: .06em; text-transform: uppercase;
+      user-select: none; pointer-events: none;
+    }
+    .stack-word .solid { font-size: clamp(72px, 8vw, 150px); color: rgba(242,240,230,.92); }
+    .stack-word .outline { font-size: clamp(72px, 8vw, 150px); color: transparent; -webkit-text-stroke: 1.5px rgba(242,240,230,.65); }
+    .stack-script { font-family: 'Dancing Script', cursive; font-size: clamp(1.8rem, 3vw, 3.5rem); color: var(--orange); position: absolute; bottom: 28%; right: 8%; transform: rotate(-5deg); }
+    .panel-photo {
+      /* SWAP: background: url('assets/bar1.jpg') center/cover no-repeat; */
+      background: linear-gradient(135deg, #1e1a14 0%, #2a2218 50%, #1a1a16 100%);
+    }
+    .panel-photo::before { content: '[Photo — drop assets/bar1.jpg here]'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: .65rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(242,240,230,.15); }
+    .caption { position: absolute; left: 18px; bottom: 16px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(242,240,230,.55); }
+    .naos-badge { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border: 1px solid rgba(232,76,30,.4); background: rgba(232,76,30,.1); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); border-radius: 2px; }
+    .naos-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(232,76,30,.6)} 70%{box-shadow:0 0 0 8px rgba(232,76,30,0)} 100%{box-shadow:0 0 0 0 rgba(232,76,30,0)} }
 
-.nav-links { display: flex; gap: 32px; }
-.nav-links a {
-  font-size: 0.58rem;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.15s;
-}
-.nav-links a:hover { color: var(--paper); }
-.nav-links a.active { color: var(--paper); }
+    /* BAR 2 — pill row + full-bleed RESEARCH word */
+    .bar2 { grid-template-columns: 1fr; }
+    .pill-row { background: #070707; border: 1px solid rgba(255,255,255,.06); padding: 14px 18px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .tag { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(242,240,230,.68); border: 1px solid rgba(242,240,230,.14); padding: 7px 14px; border-radius: 999px; background: rgba(242,240,230,.04); }
+    .tag.accent { border-color: rgba(232,76,30,.55); color: rgba(232,76,30,.95); }
+    .bleed-word {
+      min-height: 500px; position: relative; border: 1px solid rgba(255,255,255,.06);
+      background: #070707; overflow: hidden; display: flex; align-items: flex-end; padding: 26px 22px;
+    }
+    .bleed-word .bg {
+      position: absolute; inset: 0;
+      /* SWAP: background: url('assets/bar2.jpg') center/cover no-repeat; */
+      background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.82)), linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,0));
+      background-size: cover; background-position: center; filter: contrast(1.05) saturate(.95);
+    }
+    .bleed-word .bg::after { content: ""; position: absolute; inset: 0; background: rgba(232,76,30,.08); }
+    .bleed-word .word {
+      position: relative; width: 100%; font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(110px, 18vw, 280px); line-height: .78; letter-spacing: .04em;
+      text-transform: uppercase; color: rgba(242,240,230,.92); mix-blend-mode: screen;
+    }
+    .bleed-word .script {
+      position: absolute; left: 50%; top: 46%; transform: translate(-50%,-50%);
+      font-family: 'Dancing Script', cursive; font-size: clamp(26px, 5vw, 72px);
+      font-weight: 700; color: rgba(232,76,30,.95); mix-blend-mode: screen;
+      pointer-events: none; white-space: nowrap;
+    }
+    .bleed-content { position: relative; display: flex; align-items: flex-end; justify-content: space-between; width: 100%; gap: 32px; }
+    .bleed-desc { max-width: 480px; font-family: 'Lora', serif; font-size: .95rem; line-height: 1.75; color: rgba(242,240,230,.85); }
 
-/* HERO */
-.hero {
-  padding-top: 56px;
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  position: relative;
-  overflow: hidden;
-}
+    /* BAR 3 — dark photo + orange circle scribble */
+    .bar3 { grid-template-columns: 1fr; }
+    .scribble {
+      border: 1px solid rgba(255,255,255,.06); background: #070707;
+      position: relative; overflow: hidden; min-height: 500px;
+      display: grid; grid-template-columns: 1.2fr .8fr; gap: var(--gap);
+    }
+    .scribble .left {
+      position: relative; padding: 40px 36px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      /* SWAP: background: url('assets/bar3.jpg') center/cover no-repeat; */
+      background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.88)), linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,0));
+      background-size: cover; background-position: center;
+    }
+    .scribble .right {
+      padding: 40px 36px; background: #0b0b0b;
+      border-left: 1px solid rgba(255,255,255,.06);
+      display: flex; flex-direction: column; justify-content: space-between; gap: 14px;
+    }
+    .bigline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 3.5vw, 4rem); line-height: 1.05; letter-spacing: .02em; color: var(--cream); margin: 0 0 24px; }
+    .circled { position: relative; display: inline-block; }
+    .scribble svg { position: absolute; left: -12px; top: -10px; width: calc(100% + 24px); height: calc(100% + 20px); transform: rotate(-6deg); pointer-events: none; }
+    .scribble path { fill: none; stroke: var(--orange); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: draw 1.4s ease forwards; }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    .practice-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .practice-pill { font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; padding: 6px 13px; border: 1px solid rgba(242,240,230,.18); color: rgba(242,240,230,.6); border-radius: 2px; }
 
-.hero-left {
-  padding: 80px 48px 80px 56px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-right: 1px solid var(--border);
-  position: relative;
-}
+    /* ── HUB — 4 doors ── */
+    .hub { padding: 64px 28px; background: var(--bg); }
+    .hub-header { max-width: 1200px; margin: 0 auto 40px; display: flex; justify-content: space-between; align-items: baseline; }
+    .hub-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: .08em; color: rgba(242,240,230,.4); }
+    .hub-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--gap); max-width: 1200px; margin: 0 auto; background: var(--ash); }
+    .hub-card { background: var(--dark); padding: 36px 28px; display: flex; flex-direction: column; justify-content: space-between; min-height: 240px; position: relative; overflow: hidden; transition: background .25s; }
+    .hub-card:hover { background: var(--charcoal); }
+    .hub-card.orange { background: var(--orange); }
+    .hub-card.orange:hover { background: #f05025; }
+    .hub-bg { position: absolute; bottom: -.1em; right: -.04em; font-family: 'Bebas Neue', sans-serif; font-size: 6.5rem; line-height: 1; color: rgba(242,240,230,.04); user-select: none; pointer-events: none; transition: transform .4s; }
+    .hub-card.orange .hub-bg { color: rgba(14,14,12,.1); }
+    .hub-card:hover .hub-bg { transform: scale(1.08) translateY(-4px); }
+    .hub-num { font-family: 'Bebas Neue', sans-serif; font-size: .75rem; letter-spacing: .16em; color: var(--orange); margin-bottom: 14px; position: relative; z-index: 1; }
+    .hub-card.orange .hub-num { color: rgba(14,14,12,.45); }
+    .hub-card-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.5rem,2vw,2rem); line-height: 1; letter-spacing: .03em; color: var(--cream); position: relative; z-index: 1; }
+    .hub-card.orange .hub-card-title { color: var(--black); }
+    .hub-card-desc { font-size: .78rem; line-height: 1.6; color: var(--cream3); margin-top: 10px; position: relative; z-index: 1; }
+    .hub-card.orange .hub-card-desc { color: rgba(14,14,12,.58); }
+    .hub-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 1; margin-top: 24px; }
+    .hub-link { font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); border-bottom: 1px solid transparent; transition: border-color .2s; }
+    .hub-card.orange .hub-link { color: var(--black); }
+    .hub-card:hover .hub-link { border-bottom-color: currentColor; }
+    .hub-arrow { font-size: 1.3rem; color: var(--ash); transform: translateX(-4px); transition: transform .22s, color .22s; }
+    .hub-card:hover .hub-arrow { transform: translateX(0); color: var(--orange); }
+    .hub-card.orange .hub-arrow { color: rgba(14,14,12,.2); }
+    .hub-card.orange:hover .hub-arrow { color: rgba(14,14,12,.5); }
 
-.hero-eyebrow {
-  font-size: 0.55rem;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 28px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+    /* ── STATUS ── */
+    .status { background: var(--charcoal); padding: 56px 28px; }
+    .status-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 180px 1fr; gap: 56px; align-items: start; }
+    .s-label { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+    .pulse-row { display: flex; align-items: center; gap: 8px; }
+    .pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); animation: pulse 2.4s infinite; }
+    .pulse-text { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--orange); }
+    .s-items { display: flex; flex-direction: column; }
+    .s-item { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; padding: 18px 0; border-bottom: 1px solid rgba(242,240,230,.07); }
+    .s-item:last-child { border-bottom: none; }
+    .s-title { font-family: 'Lora', serif; font-size: .95rem; color: var(--cream); line-height: 1.4; }
+    .s-meta { font-size: .7rem; color: var(--cream3); margin-top: 4px; }
+    .badge { font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; border-radius: 1px; flex-shrink: 0; }
+    .badge-on { background: rgba(232,76,30,.12); color: var(--orange); border: 1px solid rgba(232,76,30,.28); }
+    .badge-off { background: rgba(242,240,230,.06); color: var(--cream3); border: 1px solid rgba(242,240,230,.1); }
 
-.hero-eyebrow::before {
-  content: '';
-  width: 32px;
-  height: 1px;
-  background: var(--red);
-}
+    /* ── QUICK LINKS ── */
+    .quick { background: var(--bg); padding: 40px 28px; display: flex; justify-content: center; }
+    .quick-inner { display: flex; border: 1px solid rgba(255,255,255,.08); max-width: 1000px; width: 100%; }
+    .quick-link { flex: 1; padding: 26px 22px; display: flex; flex-direction: column; gap: 5px; border-right: 1px solid rgba(255,255,255,.08); transition: background .2s; }
+    .quick-link:last-child { border-right: none; }
+    .quick-link:hover { background: var(--charcoal); }
+    .quick-icon { font-size: .95rem; }
+    .quick-label { font-family: 'Bebas Neue', sans-serif; font-size: .9rem; letter-spacing: .08em; color: var(--cream); }
+    .quick-sub { font-size: .7rem; color: var(--cream3); }
 
-.hero-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(3rem, 5vw, 5.5rem);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -2px;
-  margin-bottom: 12px;
-  color: var(--paper);
-}
+    /* ── FOOTER STAMP ── */
+    .stamp { padding: 48px 28px 56px; background: var(--bg); text-align: center; border-top: 1px solid rgba(255,255,255,.06); }
+    .stamp .big { font-family: 'Bebas Neue', sans-serif; font-size: clamp(92px, 18vw, 320px); line-height: .78; letter-spacing: .06em; text-transform: uppercase; color: var(--orange); margin: 0; }
+    .stamp .outline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(70px, 14vw, 240px); line-height: .78; letter-spacing: .06em; text-transform: uppercase; color: transparent; -webkit-text-stroke: 2px var(--orange); margin: -10px 0 0; }
+    .stamp .links { margin-top: 18px; display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; color: rgba(242,240,230,.5); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+    .stamp .links a { padding: 8px 10px; border-radius: 999px; }
+    .stamp .links a:hover { background: rgba(255,255,255,.06); color: var(--cream); }
 
-.hero-title em {
-  font-style: italic;
-  color: var(--gold);
-}
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s, transform .7s; }
+    .reveal.visible { opacity: 1; transform: none; }
 
-.hero-subtitle {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.2rem, 2vw, 1.8rem);
-  font-style: italic;
-  color: var(--brown);
-  margin-bottom: 40px;
-  line-height: 1.3;
-}
-
-.hero-desc {
-  font-size: 0.75rem;
-  color: rgba(240,234,214,0.6);
-  line-height: 1.9;
-  max-width: 480px;
-  margin-bottom: 48px;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 12px 24px;
-  text-decoration: none;
-  transition: all 0.15s;
-  cursor: pointer;
-  border: none;
-  display: inline-block;
-}
-
-.btn-primary { background: var(--red); color: var(--paper); }
-.btn-primary:hover { background: #a01818; }
-.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--muted); }
-.btn-outline:hover { border-color: var(--paper); color: var(--paper); }
-
-/* Hero right — decorative */
-.hero-right {
-  padding: 80px 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 20px;
-  position: relative;
-}
-
-.hero-right::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px; height: 400px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(200,168,75,0.07) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.identity-card {
-  background: rgba(240,234,214,0.04);
-  border: 1px solid var(--border);
-  padding: 20px 24px;
-  position: relative;
-  transition: all 0.2s;
-}
-
-.identity-card:hover {
-  background: rgba(240,234,214,0.07);
-  border-color: rgba(240,234,214,0.2);
-  transform: translateX(4px);
-}
-
-.identity-card::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 2px;
-}
-
-.identity-card:nth-child(1)::before { background: var(--red); }
-.identity-card:nth-child(2)::before { background: var(--gold); }
-.identity-card:nth-child(3)::before { background: var(--brown); }
-.identity-card:nth-child(4)::before { background: rgba(83,208,232,0.8); }
-
-.id-label {
-  font-size: 0.52rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
-
-.id-value {
-  font-family: 'Playfair Display', serif;
-  font-size: 1rem;
-  font-style: italic;
-  color: var(--paper);
-}
-
-.id-sub {
-  font-size: 0.6rem;
-  color: var(--muted);
-  margin-top: 3px;
-  line-height: 1.5;
-}
-
-/* ABOUT SECTION */
-.about-section {
-  padding: 80px 56px;
-  border-top: 1px solid var(--border);
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 80px;
-  align-items: start;
-}
-
-.about-label {
-  font-size: 0.55rem;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--muted);
-  position: sticky;
-  top: 80px;
-}
-
-.about-label span {
-  display: block;
-  font-family: 'Playfair Display', serif;
-  font-size: 3rem;
-  font-style: italic;
-  color: var(--paper);
-  letter-spacing: -1px;
-  line-height: 1;
-  margin-top: 8px;
-  font-weight: 900;
-}
-
-.about-content {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-.about-block {
-  padding-bottom: 32px;
-  border-bottom: 1px solid var(--border);
-}
-
-.about-block:last-child { border-bottom: none; }
-
-.about-block h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  font-style: italic;
-  color: var(--gold);
-  margin-bottom: 12px;
-}
-
-.about-block p {
-  font-size: 0.72rem;
-  color: rgba(240,234,214,0.65);
-  line-height: 1.9;
-}
-
-.about-block p + p { margin-top: 12px; }
-
-/* CURRENT WORK */
-.current-section {
-  padding: 80px 56px;
-  border-top: 1px solid var(--border);
-  background: rgba(240,234,214,0.02);
-}
-
-.current-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-  margin-top: 32px;
-}
-
-.current-card {
-  background: rgba(240,234,214,0.04);
-  border: 1px solid var(--border);
-  padding: 24px;
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-
-.current-card:hover {
-  background: rgba(240,234,214,0.07);
-  border-color: rgba(240,234,214,0.2);
-}
-
-.current-card::after {
-  content: '→';
-  position: absolute;
-  bottom: 20px; right: 20px;
-  font-size: 1rem;
-  color: var(--muted);
-  transition: all 0.2s;
-}
-
-.current-card:hover::after {
-  color: var(--paper);
-  right: 16px;
-}
-
-.card-tag {
-  font-size: 0.52rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 10px;
-  display: block;
-}
-
-.card-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  font-style: italic;
-  color: var(--paper);
-  margin-bottom: 8px;
-  line-height: 1.3;
-}
-
-.card-desc {
-  font-size: 0.65rem;
-  color: var(--muted);
-  line-height: 1.7;
-}
-
-/* FOOTER */
-footer {
-  padding: 28px 56px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.55rem;
-  color: var(--muted);
-  letter-spacing: 1.5px;
-}
-
-footer a { color: var(--muted); text-decoration: none; }
-footer a:hover { color: var(--paper); }
-
-/* ANIMATIONS */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.hero-eyebrow { animation: fadeUp 0.6s ease forwards; }
-.hero-title { animation: fadeUp 0.6s 0.1s ease forwards; opacity: 0; }
-.hero-subtitle { animation: fadeUp 0.6s 0.2s ease forwards; opacity: 0; }
-.hero-desc { animation: fadeUp 0.6s 0.3s ease forwards; opacity: 0; }
-.hero-actions { animation: fadeUp 0.6s 0.4s ease forwards; opacity: 0; }
-.identity-card:nth-child(1) { animation: fadeUp 0.5s 0.2s ease forwards; opacity: 0; }
-.identity-card:nth-child(2) { animation: fadeUp 0.5s 0.3s ease forwards; opacity: 0; }
-.identity-card:nth-child(3) { animation: fadeUp 0.5s 0.4s ease forwards; opacity: 0; }
-.identity-card:nth-child(4) { animation: fadeUp 0.5s 0.5s ease forwards; opacity: 0; }
-
-@media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; }
-  .hero-left { border-right: none; border-bottom: 1px solid var(--border); }
-  .about-section { grid-template-columns: 1fr; gap: 32px; }
-  nav { padding: 0 20px; }
-  .nav-links { gap: 18px; }
-  .hero-left, .about-section, .current-section { padding-left: 24px; padding-right: 24px; }
-}
-</style>
+    /* ── RESPONSIVE ── */
+    @media (max-width: 980px) {
+      .bar1 { grid-template-columns: 1fr; min-height: auto; }
+      .scribble { grid-template-columns: 1fr; }
+      .hero-meta { grid-template-columns: 1fr; align-items: start; }
+      .hero-ctas { justify-content: flex-start; }
+      .side-rail { display: none; }
+      .hub-grid { grid-template-columns: repeat(2,1fr); }
+      .status-inner { grid-template-columns: 1fr; gap: 20px; }
+    }
+    @media (max-width: 600px) {
+      .hub-grid { grid-template-columns: 1fr 1fr; }
+      .quick-inner { flex-wrap: wrap; }
+      .quick-link { flex: 1 1 40%; border-bottom: 1px solid rgba(255,255,255,.08); }
+      .scribble .left, .scribble .right { padding: 28px 20px; }
+    }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="index.html" class="nav-logo">The <span>Feral</span> Anthropologist</a>
-  <div class="nav-links">
-    <a href="index.html" class="active">Home</a>
-    <a href="research.html">Research</a>
-    <a href="zine.html">Field Notes</a>
-    <a href="writing.html">Writing</a>
+<!-- NAV -->
+<nav class="nav">
+  <a class="brand" href="#top">FERAL <span>ANTHRO</span></a>
+  <div class="links">
+    <a href="#research">Research</a>
+    <a href="#writing">Writing</a>
+    <a href="/naos">NAOS</a>
+    <a href="/cv" class="primary">CV</a>
   </div>
 </nav>
 
-<div class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">Washington D.C. — Est. 2024</div>
-    <h1 class="hero-title">The<br><em>Feral</em><br>Anthro<br>pologist</h1>
-    <p class="hero-subtitle">Knowledge at the edges of institutions</p>
-    <p class="hero-desc">
-      Graduate anthropologist. USAF enlisted. Astrologer. Zine maker. 
-      Researching the places where folklore, forensics, food politics, 
-      and epistemic resistance collide — and publishing from the margins.
-    </p>
-    <div class="hero-actions">
-      <a href="zine.html" class="btn btn-primary">Read Field Notes</a>
-      <a href="research.html" class="btn btn-outline">Research Map</a>
-    </div>
-  </div>
-
-  <div class="hero-right">
-    <div class="identity-card">
-      <div class="id-label">Currently</div>
-      <div class="id-value">Graduate Anthropology</div>
-      <div class="id-sub">Cultural / Forensic — Folklore, Food Politics, Death Rituals</div>
-    </div>
-    <div class="identity-card">
-      <div class="id-label">Publishing</div>
-      <div class="id-value">Field Notes Zine</div>
-      <div class="id-sub">Issue 01 — Community Building & ICE Abolition</div>
-    </div>
-    <div class="identity-card">
-      <div class="id-label">Also</div>
-      <div class="id-value">NAOS Astrology</div>
-      <div class="id-sub">Mundane · Hellenistic · Astrocartography</div>
-    </div>
-    <div class="identity-card">
-      <div class="id-label">Thesis</div>
-      <div class="id-value">Epistemic Decolonization</div>
-      <div class="id-sub">Astrology, folklore, and food systems as resistance</div>
-    </div>
+<!-- TOP TICKER -->
+<div class="ticker orange" style="padding-top:56px">
+  <div class="ticker-track">
+    <span>Cultural Anthropology</span><span>Troy University</span><span>Ethnographic Fieldwork</span>
+    <span>DC Punk Research</span><span>Mutual Aid</span><span>NAOS Astrology</span>
+    <span>Zine Publisher</span><span>USAF</span><span>Qualitative Methods</span>
+    <span>Cultural Anthropology</span><span>Troy University</span><span>Ethnographic Fieldwork</span>
+    <span>DC Punk Research</span><span>Mutual Aid</span><span>NAOS Astrology</span>
+    <span>Zine Publisher</span><span>USAF</span><span>Qualitative Methods</span>
   </div>
 </div>
 
-<!-- About -->
-<div class="about-section">
-  <div class="about-label">
-    // About
-    <span>Who<br>I Am</span>
+<!-- ════════════ HERO ════════════ -->
+<header class="hero" id="top">
+  <div class="hero-photo" role="img" aria-label="Hero background — replace with real photo"></div>
+
+  <div class="side-rail" aria-hidden="true">
+    <div class="rail">FIELDWORK · RESEARCH</div>
+    <div class="rail">FIELDNOTES · NAOS ASTROLOGY</div>
   </div>
-  <div class="about-content">
-    <div class="about-block">
-      <h3>The Academic</h3>
-      <p>I'm a graduate student in Cultural and Forensic Anthropology, working at the intersection of folklore, food politics, and what I call epistemic decolonization — the project of taking seriously the knowledge systems that Western academia has spent centuries dismissing.</p>
-      <p>My current research spans punk culture as living folklore, apiculture as a resilience indicator in food-insecure communities, and the forensic and folkloric traditions we use to make meaning of the dead.</p>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-word" aria-label="The Feral Anthropologist">
+        <span class="fwrap">
+          <span class="hero-the">The</span>
+          FERAL
+        </span>
+        <span class="hero-script">Anthropologist</span>
+      </div>
+      <div class="hero-meta">
+        <p class="hero-blurb">
+          Graduate researcher at the edges of what institutions choose to document.
+          Studying how meaning gets made and transmitted — in punk venues and natal charts alike.
+        </p>
+        <div class="hero-ctas">
+          <a class="hero-pill primary" href="#research">Enter Research</a>
+          <a class="hero-pill" href="/naos">NAOS Astrology</a>
+          <a class="hero-pill" href="/cv">Open CV</a>
+        </div>
+      </div>
     </div>
-    <div class="about-block">
-      <h3>The Practitioner</h3>
-      <p>I'm active duty USAF enlisted and a practicing astrologer running NAOS — a consulting practice built on the thesis that astrology is not pseudoscience but a delegitimized non-Western knowledge system. The same argument runs through everything I research.</p>
-    </div>
-    <div class="about-block">
-      <h3>The Publisher</h3>
-      <p>Field Notes is my zine series — accessible, political, community-rooted. Issue 01 is about ICE abolition and concrete ways to build and protect community. Written for everyday people, not academic audiences.</p>
-    </div>
+  </div>
+</header>
+
+<!-- BOTTOM TICKER -->
+<div class="ticker dark">
+  <div class="ticker-track">
+    <span>Kevin Castaneda</span><span>Buko Buko</span><span>PinkHouse</span>
+    <span>Songbyrd DC</span><span>PieShop DC</span><span>Punk as Mutual Aid</span>
+    <span>Identity Transmission</span><span>Autonomy</span><span>Behavioral Norms</span>
+    <span>Kevin Castaneda</span><span>Buko Buko</span><span>PinkHouse</span>
+    <span>Songbyrd DC</span><span>PieShop DC</span><span>Punk as Mutual Aid</span>
+    <span>Identity Transmission</span><span>Autonomy</span><span>Behavioral Norms</span>
   </div>
 </div>
 
-<!-- Current work -->
-<div class="current-section">
-  <div class="sec-label">// Current Work</div>
-  <div class="current-grid">
-    <a href="zine.html" class="current-card">
-      <span class="card-tag">New Release</span>
-      <div class="card-title">Field Notes — Issue 01</div>
-      <div class="card-desc">Abolish ICE. Community building tools for everyday people. Available now.</div>
+<!-- ═══════════════════════════════════════
+     BAR 1 — copy | FIELD/WORK | photo
+════════════════════════════════════════ -->
+<main class="bars">
+<section class="bar bar1 reveal" id="research">
+  <div class="panel pad">
+    <div class="kicker">Who I am</div>
+    <h2 class="h3">Two Methods.<br/>One Question.</h2>
+    <p class="p">Graduate anthropology student at Troy University. Active duty USAF. Built around a single preoccupation: how do humans transmit meaning when there's no official curriculum for it? In the field it lives in DC punk venues. Outside academia it lives in NAOS Astrology. Same obsession, two methodologies.</p>
+    <div class="btn-row">
+      <span class="naos-badge"><span class="naos-dot"></span> Active Research</span>
+      <a class="btn accent" href="/research">Research page →</a>
+    </div>
+  </div>
+
+  <div class="panel" style="position:relative;">
+    <div class="stack-word" aria-hidden="true">
+      <div class="solid">FIELD</div>
+      <div class="outline">WORK</div>
+    </div>
+    <span class="stack-script">in the field</span>
+  </div>
+
+  <div class="panel panel-photo">
+    <div class="caption">DC · Songbyrd · PieShop · 2024–25</div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     BAR 2 — pill row + RESEARCH bleed word
+════════════════════════════════════════ -->
+<section class="bar bar2 reveal" id="writing">
+  <div class="pill-row">
+    <span class="tag accent">Ethnography</span>
+    <span class="tag">Qualitative Coding</span>
+    <span class="tag">Participant Observation</span>
+    <span class="tag">Fieldwork</span>
+    <span class="tag">Zine Publication</span>
+    <span class="tag">Forensic Anthropology</span>
+  </div>
+
+  <div class="bleed-word">
+    <div class="bg" aria-hidden="true"></div>
+    <div class="word">RESEARCH</div>
+    <div class="script">in the field</div>
+    <div class="bleed-content">
+      <p class="bleed-desc">An ethnographic study of DC's punk scene as intergenerational activist transmission. Not a history of the music — a forensic look at how communities pass down radical values through behavioral norms, collective identity, and the practice of showing up. Three interviews deep. Paper due March 14.</p>
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:12px; flex-shrink:0;">
+        <a class="btn accent" href="/research">Full research →</a>
+        <span style="font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; color:rgba(242,240,230,.35);">Troy University · Cultural Anthropology</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     BAR 3 — NAOS dark + orange circle
+════════════════════════════════════════ -->
+<section class="bar bar3 reveal">
+  <div class="scribble">
+    <div class="left">
+      <div class="kicker" style="color:rgba(242,240,230,.45)">The Practice · NAOS Astrology</div>
+      <p class="bigline">
+        Find the
+        <span class="circled">right lens
+          <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10,30 C15,8 50,3 100,4 C150,5 190,12 192,30 C194,48 155,57 100,56 C45,55 5,48 10,30 Z" stroke="#e84c1e" stroke-width="5" fill="none" stroke-dasharray="2000" stroke-dashoffset="2000" style="animation:draw 1.4s ease forwards"/>
+          </svg>
+        </span><br/>for your chart.
+      </p>
+      <p class="p">Humanistic astrology consultancy. Not prediction — a lens for locating yourself in time. The same question as fieldwork: how do humans make meaning when there's no official map?</p>
+      <div class="btn-row" style="margin-top:28px;">
+        <a class="btn accent" href="/naos">Visit NAOS →</a>
+        <a class="btn" href="mailto:your@feralanthro.com">Book a reading</a>
+      </div>
+    </div>
+    <div class="right">
+      <div>
+        <div class="kicker">The other half of the work</div>
+        <p class="p" style="font-family:'Lora',serif; font-style:italic; font-size:1rem; line-height:1.75; color:rgba(242,240,230,.85);">
+          "Fieldwork and astrology ask the same question. How do communities transmit meaning across generations when there's no official curriculum for it?"
+        </p>
+      </div>
+      <div class="practice-pills">
+        <span class="practice-pill">Natal Charts</span>
+        <span class="practice-pill">Transits</span>
+        <span class="practice-pill">Humanistic Astrology</span>
+        <span class="practice-pill">Consultancy</span>
+        <span class="practice-pill">Meaning-Making</span>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ═══════════ HUB ═══════════ -->
+<section class="hub reveal">
+  <div class="hub-header">
+    <div class="hub-title">Where to go</div>
+    <span style="font-size:.8rem; color:var(--cream3)">Pick a door.</span>
+  </div>
+  <div class="hub-grid">
+    <a href="/research" class="hub-card">
+      <div class="hub-bg">RES</div>
+      <div><div class="hub-num">01 — Research</div><div class="hub-card-title">Fieldwork &amp; Papers</div><div class="hub-card-desc">Ethnographic projects, methodologies, DC fieldwork, academic writing.</div></div>
+      <div class="hub-bottom"><span class="hub-link">Enter →</span><span class="hub-arrow">→</span></div>
     </a>
-    <a href="research.html" class="current-card">
-      <span class="card-tag">Research</span>
-      <div class="card-title">The Honey Index</div>
-      <div class="card-desc">Apiculture as a bioindicator of resilience in food-insecure communities. Grad paper in progress.</div>
+    <a href="/naos" class="hub-card orange">
+      <div class="hub-bg">NAO</div>
+      <div><div class="hub-num">02 — Practice</div><div class="hub-card-title">NAOS Astrology</div><div class="hub-card-desc">Consultancy. Readings. The other half of the work.</div></div>
+      <div class="hub-bottom"><span class="hub-link">Visit →</span><span class="hub-arrow">→</span></div>
     </a>
-    <a href="research.html" class="current-card">
-      <span class="card-tag">Folklore</span>
-      <div class="card-title">Punk as Vernacular Cosmology</div>
-      <div class="card-desc">Researching punk culture as a living folklore system for ANT-6696.</div>
+    <a href="/writing" class="hub-card" style="background:var(--charcoal)">
+      <div class="hub-bg">WRT</div>
+      <div><div class="hub-num">03 — Writing</div><div class="hub-card-title">Essays &amp; Zines</div><div class="hub-card-desc">Academic work and Field Notes zines outside the paywall.</div></div>
+      <div class="hub-bottom"><span class="hub-link">Read →</span><span class="hub-arrow">→</span></div>
     </a>
-    <a href="writing.html" class="current-card">
-      <span class="card-tag">Writing</span>
-      <div class="card-title">Latest Essays</div>
-      <div class="card-desc">Longer-form work on anthropology, resistance, and what it means to know things differently.</div>
+    <a href="/cv" class="hub-card">
+      <div class="hub-bg">CV</div>
+      <div><div class="hub-num">04 — Record</div><div class="hub-card-title">Curriculum Vitae</div><div class="hub-card-desc">Credentials, fieldwork history, research interests.</div></div>
+      <div class="hub-bottom"><span class="hub-link">View →</span><span class="hub-arrow">→</span></div>
     </a>
+  </div>
+</section>
+
+<!-- STATUS -->
+<section class="status reveal">
+  <div class="status-inner">
+    <div><div class="s-label">Right now</div><div class="pulse-row"><div class="pulse-dot"></div><span class="pulse-text">Live</span></div></div>
+    <div class="s-items">
+      <div class="s-item"><div><div class="s-title">Punk as Mutual Aid: Intergenerational Activist Transmission in DC</div><div class="s-meta">Academic paper · Troy University · Due March 14</div></div><span class="badge badge-on">Writing</span></div>
+      <div class="s-item"><div><div class="s-title">Field Notes Zine — Documentation Practices, 8-page origami format</div><div class="s-meta">The Feral Anthropologist · Print</div></div><span class="badge badge-on">Active</span></div>
+      <div class="s-item"><div><div class="s-title">NAOS Astrology — Open for bookings</div><div class="s-meta">Consultancy · Ongoing client work</div></div><span class="badge badge-on">Open</span></div>
+      <div class="s-item"><div><div class="s-title">Graduate Program · Cultural &amp; Forensic Anthropology, Troy University</div><div class="s-meta">Active enrollment · Qualitative coding phase</div></div><span class="badge badge-off">Enrolled</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK LINKS -->
+<div class="quick reveal">
+  <div class="quick-inner">
+    <a href="https://substack.com" class="quick-link"><div class="quick-icon">✍️</div><div class="quick-label">Substack</div><div class="quick-sub">Writing &amp; updates</div></a>
+    <a href="https://ko-fi.com" class="quick-link"><div class="quick-icon">☕</div><div class="quick-label">Ko-fi</div><div class="quick-sub">Zines &amp; support</div></a>
+    <a href="/naos" class="quick-link"><div class="quick-icon">♄</div><div class="quick-label">NAOS Astrology</div><div class="quick-sub">Book a reading</div></a>
+    <a href="mailto:your@feralanthro.com" class="quick-link"><div class="quick-icon">✉</div><div class="quick-label">Contact</div><div class="quick-sub">Research &amp; collaboration</div></a>
   </div>
 </div>
 
-<footer>
-  <span>© The Feral Anthropologist — Washington D.C.</span>
-  <div style="display:flex;gap:24px;">
-<a href="https://substack.com/@feralanthro" target="_blank">Substack</a>
-<a href="https://ko-fi.com/feralanthro/shop" target="_blank">Ko-fi</a>
-<a href="https://instagram.com/feralanthro" target="_blank">Instagram</a>
+<!-- FOOTER STAMP -->
+<footer class="stamp">
+  <p class="big">FERAL</p>
+  <p class="outline">ANTHRO</p>
+  <div class="links">
+    <a href="/research">Research</a>
+    <a href="/naos">NAOS</a>
+    <a href="/writing">Writing</a>
+    <a href="/cv">CV</a>
+    <a href="mailto:your@feralanthro.com">Contact</a>
   </div>
 </footer>
 
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
 </body>
 </html>
