@@ -1,9 +1,11 @@
-lanthro<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The Feral Anthropologist — Fieldwork. Meaning. Documentation.</title>
+  <meta name="description" content="The Feral Anthropologist is the home of ethnographic fieldwork, writing, and NAOS Astrology." />
+  <meta name="theme-color" content="#070707" />
+  <title>The Feral Anthropologist | Fieldwork, Writing, and NAOS Astrology</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@500;700&family=Lora:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
@@ -148,22 +150,6 @@ lanthro<!doctype html>
     }
     .hero-pill:hover { transform: translateY(-1px); background: rgba(242,240,230,.22); }
     .hero-pill.primary { background: rgba(10,10,10,.72); color: rgba(242,240,230,.95); border-color: rgba(10,10,10,.2); }
-@media (max-width: 980px) {
-  .bar1 { grid-template-columns: 1fr; min-height: auto; }
-  .scribble { grid-template-columns: 1fr; }
-  .hero-meta { grid-template-columns: 1fr; align-items: start; }
-  .hero-ctas { justify-content: flex-start; }
-  .side-rail { display: none; }
-  .hub-grid { grid-template-columns: repeat(2,1fr); }
-  .status-inner { grid-template-columns: 1fr; gap: 20px; }
-}
-
-@media (max-width: 600px) {
-  .hub-grid { grid-template-columns: 1fr 1fr; }
-  .quick-inner { flex-wrap: wrap; }
-  .quick-link { flex: 1 1 40%; border-bottom: 1px solid rgba(255,255,255,.08); }
-  .scribble .left, .scribble .right { padding: 28px 20px; }
-}
     /* ══════════════════════════════════════════
        3 BARS
     ══════════════════════════════════════════ */
@@ -197,7 +183,7 @@ lanthro<!doctype html>
       /* SWAP: background: url('assets/bar1.jpg') center/cover no-repeat; */
       background: linear-gradient(135deg, #1e1a14 0%, #2a2218 50%, #1a1a16 100%);
     }
-    .panel-photo::before { content: '[Photo — drop assets/bar1.jpg here]'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: .65rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(242,240,230,.15); }
+    .panel-photo::before { content: 'Field image'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: .65rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(242,240,230,.15); }
     .caption { position: absolute; left: 18px; bottom: 16px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(242,240,230,.55); }
     .naos-badge { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border: 1px solid rgba(232,76,30,.4); background: rgba(232,76,30,.1); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); border-radius: 2px; }
     .naos-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); animation: pulse 2s infinite; }
@@ -210,7 +196,7 @@ lanthro<!doctype html>
     .tag.accent { border-color: rgba(232,76,30,.55); color: rgba(232,76,30,.95); }
     .bleed-word {
       min-height: 500px; position: relative; border: 1px solid rgba(255,255,255,.06);
-      background: #070707; overflow: hidden; display: flex; align-items: flex-end; padding: 26px 22px;
+      background: #070707; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 22px; padding: 26px 22px;
     }
     .bleed-word .bg {
       position: absolute; inset: 0;
@@ -230,8 +216,9 @@ lanthro<!doctype html>
       font-weight: 700; color: rgba(232,76,30,.95); mix-blend-mode: screen;
       pointer-events: none; white-space: nowrap;
     }
-    .bleed-content { position: relative; display: flex; align-items: flex-end; justify-content: space-between; width: 100%; gap: 32px; }
+    .bleed-content { position: relative; display: flex; align-items: flex-end; justify-content: space-between; width: 100%; gap: 32px; flex-wrap: wrap; }
     .bleed-desc { max-width: 480px; font-family: 'Lora', serif; font-size: .95rem; line-height: 1.75; color: rgba(242,240,230,.85); }
+    .bleed-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; flex-shrink: 0; }
 
     /* BAR 3 — dark photo + orange circle scribble */
     .bar3 { grid-template-columns: 1fr; }
@@ -332,13 +319,28 @@ lanthro<!doctype html>
       .hero-meta { grid-template-columns: 1fr; align-items: start; }
       .hero-ctas { justify-content: flex-start; }
       .side-rail { display: none; }
+      .bleed-word { min-height: 420px; }
+      .bleed-content { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .bleed-actions { align-items: flex-start; }
       .hub-grid { grid-template-columns: repeat(2,1fr); }
       .status-inner { grid-template-columns: 1fr; gap: 20px; }
+      .s-item { grid-template-columns: 1fr; gap: 10px; }
     }
     @media (max-width: 600px) {
-      .hub-grid { grid-template-columns: 1fr 1fr; }
+      .nav { height: auto; min-height: 56px; padding: 10px 16px; gap: 10px; flex-wrap: wrap; }
+      .nav .links { gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+      .nav .links a { padding: 6px 8px; font-size: 10px; }
+      .hero-inner { padding: 28px 20px 56px; }
+      .hero-word { font-size: clamp(88px, 28vw, 140px); }
+      .hero-the { top: 18px; font-size: 18px; }
+      .hero-script { font-size: clamp(28px, 9vw, 54px); }
+      .bleed-word { min-height: auto; padding: 24px 18px; }
+      .bleed-word .word { font-size: clamp(64px, 22vw, 120px); }
+      .bleed-word .script { top: 32%; font-size: clamp(22px, 8vw, 42px); }
+      .bleed-desc { font-size: .9rem; line-height: 1.65; }
+      .hub-grid { grid-template-columns: 1fr; }
       .quick-inner { flex-wrap: wrap; }
-      .quick-link { flex: 1 1 40%; border-bottom: 1px solid rgba(255,255,255,.08); }
+      .quick-link { flex: 1 1 100%; border-bottom: 1px solid rgba(255,255,255,.08); }
       .scribble .left, .scribble .right { padding: 28px 20px; }
     }
   </style>
@@ -346,13 +348,13 @@ lanthro<!doctype html>
 <body>
 
 <!-- NAV -->
-<nav class="nav">
+<nav class="nav" aria-label="Primary">
   <a class="brand" href="#top">FERAL <span>ANTHRO</span></a>
   <div class="links">
     <a href="#research">Research</a>
-    <a href="#writing">Writing</a>
-    <a href="/naos">NAOS</a>
-    <a href="/cv" class="primary">CV</a>
+    <a href="https://substack.com/@feralanthro" target="_blank" rel="noreferrer">Writing</a>
+    <a href="#practice">Practice</a>
+    <a href="/Resume_CV.pdf" class="primary" target="_blank" rel="noreferrer">CV</a>
   </div>
 </nav>
 
@@ -370,11 +372,11 @@ lanthro<!doctype html>
 
 <!-- ════════════ HERO ════════════ -->
 <header class="hero" id="top">
-  <div class="hero-photo" role="img" aria-label="Hero background — replace with real photo"></div>
+  <div class="hero-photo" role="img" aria-label="Abstract warm-toned background for The Feral Anthropologist"></div>
 
   <div class="side-rail" aria-hidden="true">
     <div class="rail">FIELDWORK · RESEARCH</div>
-    <div class="rail">FIELDNOTES · NAOS ASTROLOGY</div>
+    <div class="rail">WRITING · DOCUMENTATION</div>
   </div>
 
   <div class="hero-inner">
@@ -388,13 +390,13 @@ lanthro<!doctype html>
       </div>
       <div class="hero-meta">
         <p class="hero-blurb">
-          Graduate researcher at the edges of what institutions choose to document.
-          Studying how meaning gets made and transmitted — from punk venues and natal charts alike.
+          Graduate researcher focused on ethnographic fieldwork, cultural documentation, and the ways communities transmit meaning outside formal institutions.
+          This site serves as a portfolio for academic research, writing, and ongoing field-based work.
         </p>
         <div class="hero-ctas">
-          <a class="hero-pill primary" href="#research">Enter Research</a>
-          <a class="hero-pill" href="/naos">NAOS Astrology</a>
-          <a class="hero-pill" href="/cv">Open CV</a>
+          <a class="hero-pill primary" href="#research">View Research</a>
+          <a class="hero-pill" href="https://substack.com/@feralanthro" target="_blank" rel="noreferrer">Read Writing</a>
+          <a class="hero-pill" href="/Resume_CV.pdf" target="_blank" rel="noreferrer">Open CV</a>
         </div>
       </div>
     </div>
@@ -419,12 +421,12 @@ lanthro<!doctype html>
 <main class="bars">
 <section class="bar bar1 reveal" id="research">
   <div class="panel pad">
-    <div class="kicker">Who I am</div>
-    <h2 class="h3">Two Methods.<br/>One Question.</h2>
-    <p class="p">Graduate anthropology student. Built around a single preoccupation: how do humans transmit meaning when there's no official curriculum for it? In the field it lives in DC punk venues. Outside academia it lives in NAOS Astrology. Same obsession, two methodologies.</p>
+    <div class="kicker">Research focus</div>
+    <h2 class="h3">Fieldwork.<br/>Writing. Analysis.</h2>
+    <p class="p">Graduate anthropology student documenting how communities build, preserve, and transmit meaning beyond official institutions. My current work centers on DC punk scenes, ethnographic observation, qualitative analysis, and public-facing writing that translates field research into accessible documentation.</p>
     <div class="btn-row">
-      <span class="naos-badge"><span class="naos-dot"></span> Active Research</span>
-      <a class="btn accent" href="/research">Research page →</a>
+      <span class="naos-badge"><span class="naos-dot"></span> Current Fieldwork</span>
+      <a class="btn accent" href="https://substack.com/@feralanthro" target="_blank" rel="noreferrer">Read on Substack →</a>
     </div>
   </div>
 
@@ -459,9 +461,9 @@ lanthro<!doctype html>
     <div class="word">RESEARCH</div>
     <div class="script">in the field</div>
     <div class="bleed-content">
-      <p class="bleed-desc">An ethnographic study of DC's punk scene as intergenerational activist transmission. Not a history of the music — a forensic look at how communities pass down radical values through behavioral norms, collective identity, and the practice of showing up. Three interviews deep. Paper due March 14.</p>
-      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:12px; flex-shrink:0;">
-        <a class="btn accent" href="/research">Full research →</a>
+      <p class="bleed-desc">An ethnographic study of DC's punk scene as a site of intergenerational activist transmission. The project examines how radical values move through behavioral norms, collective identity, and the repeated practice of showing up, with a focus on documentation, memory, and community continuity.</p>
+      <div class="bleed-actions">
+        <a class="btn accent" href="mailto:feralanthroboi@gmail.com">Request research details →</a>
         <span style="font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; color:rgba(242,240,230,.35);">Troy University · Cultural Anthropology</span>
       </div>
     </div>
@@ -471,7 +473,7 @@ lanthro<!doctype html>
 <!-- ═══════════════════════════════════════
      BAR 3 — NAOS dark + orange circle
 ════════════════════════════════════════ -->
-<section class="bar bar3 reveal">
+<section class="bar bar3 reveal" id="practice">
   <div class="scribble">
     <div class="left">
       <div class="kicker" style="color:rgba(242,240,230,.45)">The Practice · NAOS Astrology</div>
@@ -485,8 +487,8 @@ lanthro<!doctype html>
       </p>
       <p class="p">Humanistic astrology consultancy. Not prediction — a lens for locating yourself in time. The same question as fieldwork: how do humans make meaning when there's no official map?</p>
       <div class="btn-row" style="margin-top:28px;">
-        <a class="btn accent" href="/naos">Visit NAOS →</a>
-        <a class="btn" href="mailto:your@feralanthro.com">Book a reading</a>
+        <a class="btn accent" href="https://www.naosx.com" target="_blank" rel="noreferrer">Visit NAOS →</a>
+        <a class="btn" href="mailto:feralanthroboi@gmail.com">Book a reading</a>
       </div>
     </div>
     <div class="right">
@@ -515,22 +517,22 @@ lanthro<!doctype html>
     <span style="font-size:.8rem; color:var(--cream3)">Pick a door.</span>
   </div>
   <div class="hub-grid">
-    <a href="/research" class="hub-card">
+    <a href="#research" class="hub-card">
       <div class="hub-bg">RES</div>
       <div><div class="hub-num">01 — Research</div><div class="hub-card-title">Fieldwork &amp; Papers</div><div class="hub-card-desc">Ethnographic projects, methodologies, DC fieldwork, academic writing.</div></div>
       <div class="hub-bottom"><span class="hub-link">Enter →</span><span class="hub-arrow">→</span></div>
     </a>
-    <a href="/naos" class="hub-card orange">
+    <a href="#practice" class="hub-card orange">
       <div class="hub-bg">NAO</div>
-      <div><div class="hub-num">02 — Practice</div><div class="hub-card-title">NAOS Astrology</div><div class="hub-card-desc">Consultancy. Readings. The other half of the work.</div></div>
+      <div><div class="hub-num">02 — Practice</div><div class="hub-card-title">NAOS Astrology</div><div class="hub-card-desc">A secondary practice centered on consultation, interpretation, and reflective work.</div></div>
       <div class="hub-bottom"><span class="hub-link">Visit →</span><span class="hub-arrow">→</span></div>
     </a>
-    <a href="/writing" class="hub-card" style="background:var(--charcoal)">
+    <a href="https://substack.com/@feralanthro" class="hub-card" style="background:var(--charcoal)" target="_blank" rel="noreferrer">
       <div class="hub-bg">WRT</div>
       <div><div class="hub-num">03 — Writing</div><div class="hub-card-title">Essays &amp; Zines</div><div class="hub-card-desc">Academic work and Field Notes zines outside the paywall.</div></div>
       <div class="hub-bottom"><span class="hub-link">Read →</span><span class="hub-arrow">→</span></div>
     </a>
-    <a href="/cv" class="hub-card">
+    <a href="/Resume_CV.pdf" class="hub-card" target="_blank" rel="noreferrer">
       <div class="hub-bg">CV</div>
       <div><div class="hub-num">04 — Record</div><div class="hub-card-title">Curriculum Vitae</div><div class="hub-card-desc">Credentials, fieldwork history, research interests.</div></div>
       <div class="hub-bottom"><span class="hub-link">View →</span><span class="hub-arrow">→</span></div>
@@ -543,7 +545,7 @@ lanthro<!doctype html>
   <div class="status-inner">
     <div><div class="s-label">Right now</div><div class="pulse-row"><div class="pulse-dot"></div><span class="pulse-text">Live</span></div></div>
     <div class="s-items">
-      <div class="s-item"><div><div class="s-title">Punk as Mutual Aid: Intergenerational Activist Transmission in DC</div><div class="s-meta">Academic paper · Troy University · Due March 14</div></div><span class="badge badge-on">Writing</span></div>
+      <div class="s-item"><div><div class="s-title">Punk as Mutual Aid: Intergenerational Activist Transmission in DC</div><div class="s-meta">Academic paper · Troy University · In progress</div></div><span class="badge badge-on">Writing</span></div>
       <div class="s-item"><div><div class="s-title">Field Notes Zine — Documentation Practices, 8-page origami format</div><div class="s-meta">The Feral Anthropologist · Print</div></div><span class="badge badge-on">Active</span></div>
       <div class="s-item"><div><div class="s-title">NAOS Astrology — Open for bookings</div><div class="s-meta">Consultancy · Ongoing client work</div></div><span class="badge badge-on">Open</span></div>
       <div class="s-item"><div><div class="s-title">Graduate Program · Cultural &amp; Forensic Anthropology, Troy University</div><div class="s-meta">Active enrollment · Qualitative coding phase</div></div><span class="badge badge-off">Enrolled</span></div>
@@ -554,9 +556,9 @@ lanthro<!doctype html>
 <!-- QUICK LINKS -->
 <div class="quick reveal">
   <div class="quick-inner">
-    <a href="https://substack.com" class="quick-link"><div class="quick-icon">✍️</div><div class="quick-label">Substack</div><div class="quick-sub">Writing &amp; updates</div></a>
-    <a href="https://ko-fi.com" class="quick-link"><div class="quick-icon">☕</div><div class="quick-label">Ko-fi</div><div class="quick-sub">Zines &amp; support</div></a>
-    <a href="/naos" class="quick-link"><div class="quick-icon">♄</div><div class="quick-label">NAOS Astrology</div><div class="quick-sub">Book a reading</div></a>
+    <a href="https://substack.com/@feralanthro" class="quick-link" target="_blank" rel="noreferrer"><div class="quick-icon">✍️</div><div class="quick-label">Substack</div><div class="quick-sub">Writing &amp; updates</div></a>
+    <a href="https://ko-fi.com/feralanthro" class="quick-link" target="_blank" rel="noreferrer"><div class="quick-icon">☕</div><div class="quick-label">Ko-fi</div><div class="quick-sub">Zines &amp; support</div></a>
+    <a href="https://instagram.com/feralanthro" class="quick-link" target="_blank" rel="noreferrer"><div class="quick-icon">◐</div><div class="quick-label">Instagram</div><div class="quick-sub">Field notes &amp; updates</div></a>
     <a href="mailto:feralanthroboi@gmail.com" class="quick-link"><div class="quick-icon">✉</div><div class="quick-label">Contact</div><div class="quick-sub">Research &amp; collaboration</div></a>
   </div>
 </div>
@@ -566,10 +568,10 @@ lanthro<!doctype html>
   <p class="big">FERAL</p>
   <p class="outline">ANTHRO</p>
   <div class="links">
-    <a href="/research">Research</a>
-    <a href="/naos">NAOS</a>
-    <a href="/writing">Writing</a>
-    <a href="/cv">CV</a>
+    <a href="#research">Research</a>
+    <a href="#practice">Practice</a>
+    <a href="https://substack.com/@feralanthro" target="_blank" rel="noreferrer">Writing</a>
+    <a href="/Resume_CV.pdf" target="_blank" rel="noreferrer">CV</a>
     <a href="mailto:feralanthroboi@gmail.com">Contact</a>
   </div>
 </footer>
