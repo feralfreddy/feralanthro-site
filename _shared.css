@@ -3,14 +3,12 @@
 :root {
   --bg: #0e0c07;
   --paper: #f0ead6;
-  --paper2: #e8e0c8;
   --red: #c41e1e;
   --brown: #8b7355;
   --gold: #c8a84b;
   --muted: #4a4535;
   --text: #f0ead6;
   --border: rgba(240,234,214,0.12);
-  --border2: rgba(240,234,214,0.06);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -106,7 +104,7 @@ nav {
 
 /* FOOTER */
 footer {
-  padding: 32px 48px;
+  padding: 28px 56px;
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;

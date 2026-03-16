@@ -4,46 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Field Notes — The Feral Anthropologist</title>
+<link rel="stylesheet" href="_shared.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
-
-:root {
-  --bg: #0e0c07;
-  --paper: #f0ead6;
-  --red: #c41e1e;
-  --brown: #8b7355;
-  --gold: #c8a84b;
-  --muted: #4a4535;
-  --text: #f0ead6;
-  --border: rgba(240,234,214,0.12);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Mono', monospace; min-height: 100vh; }
-
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 1000;
-}
-
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 0 48px; height: 56px;
-  display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  background: rgba(14,12,7,0.95); backdrop-filter: blur(12px);
-}
-
-.nav-logo { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-style: italic; color: var(--paper); text-decoration: none; }
-.nav-logo span { color: var(--red); }
-.nav-links { display: flex; gap: 32px; }
-.nav-links a { font-size: 0.58rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
-.nav-links a:hover { color: var(--paper); }
-.nav-links a.active { color: var(--paper); }
-
-.page { padding-top: 56px; }
+.sec-label { margin-bottom: 32px; }
 
 /* ZINE HEADER */
 .zine-header {
@@ -314,19 +277,7 @@ nav {
   max-width: 500px;
 }
 
-footer {
-  padding: 28px 56px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.55rem;
-  color: var(--muted);
-  letter-spacing: 1.5px;
-}
-
-footer a { color: var(--muted); text-decoration: none; }
-footer a:hover { color: var(--paper); }
+.footer-links { display: flex; gap: 24px; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
@@ -338,8 +289,6 @@ footer a:hover { color: var(--paper); }
 
 @media (max-width: 900px) {
   .zine-header, .about-series { grid-template-columns: 1fr; }
-  nav { padding: 0 20px; }
-  .nav-links { gap: 16px; }
   .zine-header, .about-series, .upcoming-section, .support-section { padding-left: 24px; padding-right: 24px; }
 }
 </style>
@@ -431,7 +380,7 @@ footer a:hover { color: var(--paper); }
 
 <footer>
   <span>© The Feral Anthropologist — Field Notes Zine Series</span>
-  <div style="display:flex;gap:24px;">
+  <div class="footer-links">
     <a href="https://substack.com" target="_blank">Substack</a>
     <a href="https://ko-fi.com" target="_blank">Ko-fi</a>
     <a href="https://instagram.com" target="_blank">Instagram</a>

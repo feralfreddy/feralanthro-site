@@ -471,17 +471,13 @@
     color: var(--muted);
     font-size: 0.7rem;
   }
-</style>
-</head>
-<body>
-<style>
 .site-nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   padding: 0 48px; height: 44px;
   display: flex; align-items: center; justify-content: space-between;
   background: rgba(13,15,10,0.98); backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(181,232,83,0.15);
-  font-family: IBM Plex Mono, Space Mono, monospace;
+  font-family: 'IBM Plex Mono', 'Space Mono', monospace;
 }
 .site-nav a.snl { font-family: Georgia, serif; font-style: italic; font-size: 0.85rem; color: #f0ead6; text-decoration: none; }
 .site-nav a.snl span { color: #c41e1e; }
@@ -491,6 +487,8 @@
 .site-nav-links a.active { color: #dde8cc; }
 header { margin-top: 44px !important; }
 </style>
+</head>
+<body>
 <div class="site-nav">
   <a href="index.html" class="snl">The <span>Feral</span> Anthropologist</a>
   <div class="site-nav-links">
@@ -889,7 +887,14 @@ function addNode() {
   allData.push(node);
   localStorage.setItem('local_nodes', JSON.stringify(sessionData));
 
-  render();
+  updateStats();
+  const activeView = document.querySelector('.tab.active')?.dataset.view;
+  if (activeView === 'map') renderMap();
+  else if (activeView === 'papers') renderPapers();
+  else if (activeView === 'methods') renderMethods();
+  else if (activeView === 'theory') renderTheory();
+  else if (activeView === 'insights') renderInsights();
+
   closeAddPanel();
 
   // Reset form
@@ -927,8 +932,9 @@ function saveSheetUrl() {
 // UTILS
 // ============================================================
 function hideLoading() {
-  document.getElementById('loading').style.opacity = '0';
-  setTimeout(() => document.getElementById('loading').style.display = 'none', 400);
+  const el = document.getElementById('loading');
+  el.style.opacity = '0';
+  setTimeout(() => el.style.display = 'none', 400);
 }
 
 document.getElementById('loading').style.transition = 'opacity 0.4s';

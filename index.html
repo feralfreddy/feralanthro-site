@@ -469,10 +469,6 @@
     .stamp-links a { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--cream3); padding: 8px 12px; border-radius: 999px; transition: all .15s; }
     .stamp-links a:hover { color: var(--cream); background: rgba(255,255,255,.06); }
 
-    /* ── REVEAL ── */
-    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s, transform .7s; }
-    .reveal.visible { opacity: 1; transform: none; }
-
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .desk { min-height: auto; }
@@ -713,20 +709,23 @@
   });
 
   if (desk && window.innerWidth > 900) {
+    let rafPending = false;
     desk.addEventListener('mousemove', (event) => {
-      const rect = desk.getBoundingClientRect();
-      const cx = (event.clientX - rect.left) / rect.width - 0.5;
-      const cy = (event.clientY - rect.top) / rect.height - 0.5;
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(() => {
+        rafPending = false;
+        const rect = desk.getBoundingClientRect();
+        const cx = (event.clientX - rect.left) / rect.width - 0.5;
+        const cy = (event.clientY - rect.top) / rect.height - 0.5;
 
-      artifacts.forEach((artifact, index) => {
-        if (artifact.matches(':hover')) {
-          return;
-        }
-
-        const depth = 0.6 + (index % 3) * 0.2;
-        const baseTransform = artifact.dataset.baseTransform || '';
-        artifact.style.transition = 'transform .8s ease, box-shadow .3s ease';
-        artifact.style.transform = `${baseTransform} translate(${cx * 8 * depth}px, ${cy * 6 * depth}px)`;
+        artifacts.forEach((artifact, index) => {
+          if (artifact.matches(':hover')) return;
+          const depth = 0.6 + (index % 3) * 0.2;
+          const baseTransform = artifact.dataset.baseTransform || '';
+          artifact.style.transition = 'transform .8s ease, box-shadow .3s ease';
+          artifact.style.transform = `${baseTransform} translate(${cx * 8 * depth}px, ${cy * 6 * depth}px)`;
+        });
       });
     });
 
