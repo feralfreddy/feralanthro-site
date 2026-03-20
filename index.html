@@ -1,741 +1,376 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="The Feral Anthropologist is the home of ethnographic fieldwork, writing, and NAOS Astrology." />
-  <title>The Feral Anthropologist — Fieldwork. Meaning. Documentation.</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@500;700&family=Lora:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Feral Anthropologist — Link Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ff5c31;
+  --panel:#111111;
+  --text:#f5f5f5;
+  --ink:#111111;
+  --muted:#bdbdbd;
+  --line:rgba(255,255,255,.14);
+  --accent:#ff5c31;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+  z-index:2;
+}
+.main{min-height:100vh;display:block;padding:0}
+.shell{
+  width:min(960px, 100%);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+}
+.panel{
+  border:5px solid #1a1a1a;
+  border-radius:0;
+  overflow:hidden;
+  min-height:100vh;
+  box-shadow:0 0 0 1px rgba(0,0,0,.15);
+}
+.panel.left{background:var(--bg);color:var(--ink);position:relative}
+.panel.right{background:#000;color:var(--text);position:relative;opacity:.985;transform:translateY(18px);transition:opacity .7s ease, transform .7s ease, filter .7s ease;filter:saturate(.92) brightness(.96)}
+.panel.right.entered{opacity:1;transform:translateY(0);filter:saturate(1) brightness(1)}
+.panel.right::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.08;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255,255,255,.12), transparent 18%),
+    radial-gradient(circle at 80% 70%, rgba(255,255,255,.08), transparent 16%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.03) 0 1px, transparent 1px 5px);
+  animation:drift 16s ease-in-out infinite alternate;
+}
+@keyframes drift{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(0,-10px,0) scale(1.02)}
+}
+.topbar{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr 180px;
+  border-bottom:1px solid rgba(0,0,0,.18);
+  position:relative;
+  z-index:3;
+}
+.panel.right .topbar{border-bottom:1px solid var(--line)}
+.topcell{
+  min-height:72px;
+  padding:14px 18px;
+  border-right:1px solid rgba(0,0,0,.18);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-size:12px;
+}
+.panel.right .topcell{border-right:1px solid var(--line)}
+.topcell:last-child{border-right:none}
+.logo-center{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  z-index:5;
+}
+.logo-center img{
+  height:28px;
+  width:auto;
+  display:block;
+  opacity:.95;
+}
+.logo-center a{display:block}
+.mono,.col-title,.module-label,.lower-title,.kicker,.sticky-nav .mini-brand,.sticky-links a,.note,.deep-intro{font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.iconline{font-size:22px;line-height:1}
+.left-body{display:grid;grid-template-rows:auto 1fr;min-height:calc(100vh - 72px);position:relative;z-index:3}
+.menu-wrap{padding:46px 22px 22px;border-bottom:1px solid rgba(0,0,0,.12)}
+.link-stack{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.link-chip{
+  display:inline-block;
+  background:#111;
+  color:var(--bg);
+  font-family:'Bebas Neue', sans-serif;
+  font-size:clamp(34px,4vw,56px);
+  line-height:.9;
+  letter-spacing:.03em;
+  padding:6px 10px 5px;
+  text-transform:uppercase;
+  text-decoration:none;
+  transition:transform .18s ease, filter .18s ease;
+}
+.link-chip:hover{transform:translateX(6px);filter:brightness(1.05)}
+.kicker{margin-top:42px;display:inline-block;background:#111;color:var(--bg);padding:5px 10px}
+.subcopy{padding:20px 22px 0;font-size:12px;line-height:1.6;color:rgba(0,0,0,.62);text-transform:uppercase;letter-spacing:.03em}
+.link-grid{display:grid;grid-template-columns:1fr 1fr;margin-top:28px;border-top:1px solid rgba(0,0,0,.12)}
+.link-col{padding:20px 22px 24px;min-height:180px}
+.link-col + .link-col{border-left:1px solid rgba(0,0,0,.12)}
+.col-title{margin-bottom:18px;color:rgba(0,0,0,.6)}
+.link-list{display:flex;flex-direction:column;gap:8px}
+.link-list a{color:#111;text-decoration:none;font-size:14px;transition:opacity .18s ease, transform .18s ease}
+.link-list a:hover{opacity:.7;transform:translateX(4px)}
+.entry-glow{
+  position:absolute;
+  inset:0 0 auto 0;
+  height:120px;
+  pointer-events:none;
+  opacity:0;
+  background:linear-gradient(180deg, rgba(255,92,49,.12), rgba(255,92,49,0));
+  transition:opacity .8s ease;
+  z-index:3;
+}
+.panel.right.entered .entry-glow{opacity:1}
+.sticky-nav{
+  position:sticky;
+  top:0;
+  z-index:4;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:12px 18px;
+  background:rgba(0,0,0,.94);
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+.sticky-nav .mini-brand{color:#f1f1f1}
+.sticky-links{display:flex;flex-wrap:wrap;gap:8px}
+.sticky-links a{color:#d6d6d6;text-decoration:none;border:1px solid rgba(255,255,255,.12);padding:7px 9px;transition:background .18s ease,color .18s ease}
+.sticky-links a:hover{background:rgba(255,255,255,.08);color:#fff}
+.deep-intro{padding:18px;border-bottom:1px solid rgba(255,255,255,.12);color:#cfcfcf;position:relative;z-index:3;opacity:.82;transform:translateY(10px);transition:opacity .7s ease .08s, transform .7s ease .08s}
+.panel.right.entered .deep-intro{opacity:1;transform:translateY(0)}
+.right-body{display:grid;grid-template-rows:auto auto auto;min-height:auto;position:relative;z-index:3}
+.editorial{
+  padding:18px;
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:18px;
+  border-bottom:1px solid var(--line);
+  align-items:start;
+}
+.featured-main{
+  order:1;
+}
+.featured-side{
+  order:2;
+  display:grid;
+  gap:18px;
+}
+.editorial-copy p{font-size:14px;line-height:1.45;color:var(--text);max-width:32ch}
+.editorial-copy .small{margin-top:24px;font-size:11px;color:#d9d9d9;text-transform:uppercase;letter-spacing:.08em}
+.hero-card{transition:transform .22s ease}
+.hero-card:hover{transform:translateY(-4px)}
+.image-box{
+  aspect-ratio:16/9;
+  border:1px solid var(--line);
+  background:linear-gradient(135deg,#444 0%, #202020 45%, #0f0f0f 100%);
+  position:relative;
+  overflow:hidden;
+}
+.image-box::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(255,255,255,.04), transparent 28%, rgba(0,0,0,.18));
+  pointer-events:none;
+}
+.image-box iframe{width:100%;height:100%;display:block;position:relative;z-index:1}
+.meta-row{display:grid;grid-template-columns:1fr auto;gap:16px;padding:12px 0 0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#f1f1f1}
+.prev-link{margin-top:10px}
+.prev-link a{color:#d6d6d6;text-decoration:none;font-size:11px;letter-spacing:.12em;text-transform:uppercase;transition:opacity .2s ease, transform .2s ease}
+.prev-link a:hover{opacity:.7;transform:translateX(4px)}
+.lower{display:grid;grid-template-columns:1fr .9fr;border-top:1px solid var(--line)}
+.lower-left,.lower-right{padding:20px 18px 18px;min-height:220px}
+.lower-right{border-left:1px solid var(--line)}
+.star{font-size:24px;line-height:1;margin-bottom:18px}
+.lower-title{margin-bottom:18px}
+.lower-copy{font-size:12px;line-height:1.6;color:#cfcfcf;max-width:24ch;text-transform:uppercase}
+.texture{
+  width:100%;
+  aspect-ratio:1/1.05;
+  border:1px solid var(--line);
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255,255,255,.16), transparent 22%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.12) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, #292929, #111);
+  margin-top:10px;
+  animation:paperShift 12s ease-in-out infinite alternate;
+}
+@keyframes paperShift{from{transform:translateY(0) rotate(0deg)}to{transform:translateY(-4px) rotate(.4deg)}}
+.lower-meta{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.module-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.module{padding:18px;min-height:260px}
+.module + .module{border-left:1px solid var(--line)}
+.module-label{color:#e6e6e6;margin-bottom:14px}
+.embed-box{border:1px solid var(--line);aspect-ratio:16/9;background:linear-gradient(180deg,#1c1c1c,#0d0d0d);overflow:hidden}
+.embed-box iframe{width:100%;height:100%;display:block}
+.module-copy{margin-top:12px;font-size:12px;line-height:1.6;color:#cfcfcf;text-transform:uppercase}
+.note{padding:14px 18px 18px;border-top:1px solid var(--line);color:#d6d6d6;position:relative;z-index:3}
 
-  <style>
-    :root {
-      --bg:      #070707;
-      --dark:    #0c0c0a;
-      --charcoal:#1b1b17;
-      --ash:     #2a2a24;
-      --orange:  #e84c1e;
-      --orange2: #f06030;
-      --cream:   #f2f0e6;
-      --cream2:  #c8c4b8;
-      --cream3:  #7a7870;
-      --amber:   #f5e6a3;
-      --gap:     3px;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--cream);
-      font-family: 'DM Sans', system-ui, sans-serif;
-      font-weight: 300;
-      overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
-
-    /* grain overlay */
-    body::before {
-      content: "";
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: 999; opacity: .055;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay;
-    }
-
-    /* ── NAV ── */
-    .nav {
-      position: fixed; inset: 0 0 auto 0; height: 56px;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 28px; z-index: 200;
-      background: rgba(7,7,7,.82); backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-    .brand { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: .1em; }
-    .brand span { color: var(--orange); }
-    .nav-links { display: flex; gap: 14px; align-items: center; }
-    .nav-links a { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--cream3); padding: 8px 10px; border-radius: 999px; transition: all .15s; }
-    .nav-links a:hover { color: var(--cream); background: rgba(255,255,255,.06); }
-    .nav-links a.cta { border: 1px solid rgba(232,76,30,.45); color: rgba(232,76,30,.95); }
-    .nav-links a.cta:hover { background: rgba(232,76,30,.08); }
-
-    /* ── TICKER ── */
-    .ticker { overflow: hidden; padding: 9px 0; white-space: nowrap; }
-    .ticker.orange { background: var(--orange); }
-    .ticker.dark { background: var(--charcoal); }
-    .ticker-track { display: inline-flex; animation: tick 32s linear infinite; }
-    .ticker.dark .ticker-track { animation-direction: reverse; animation-duration: 24s; }
-    .ticker-track span { font-family: 'Bebas Neue', sans-serif; font-size: .78rem; letter-spacing: .16em; padding: 0 22px; }
-    .ticker.orange .ticker-track span { color: #070707; }
-    .ticker.dark .ticker-track span { color: var(--cream3); }
-    .ticker-track span::after { content: '✦'; margin-left: 22px; opacity: .35; }
-    @keyframes tick { from { transform: translateX(0) } to { transform: translateX(-50%) } }
-
-    /* ══════════════════════════════════════
-       HERO — Ampera style, unchanged
-    ══════════════════════════════════════ */
-    .hero {
-      padding-top: 56px;
-      min-height: 78vh;
-      position: relative;
-      overflow: hidden;
-      display: grid;
-      align-items: stretch;
-    }
-    .hero-photo {
-      position: absolute; inset: 0;
-      /* SWAP: background: url('assets/hero.jpg') center/cover no-repeat; */
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,.78)),
-        radial-gradient(1200px 600px at 20% 20%, rgba(255,255,255,.12), transparent 60%),
-        linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,0));
-      background-size: cover; background-position: center;
-      filter: saturate(.9) contrast(1.05);
-    }
-    .hero-photo::after {
-      content: ""; position: absolute; inset: 0;
-      background: rgba(232,76,30,.78);
-      mix-blend-mode: multiply;
-    }
-    .hero-inner {
-      position: relative; width: 100%;
-      display: grid; place-items: center;
-      padding: 20px 28px 36px;
-    }
-    .hero-lockup {
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-    .hero-word {
-      position: relative; width: 100%; text-align: center;
-      line-height: .78; letter-spacing: .02em; text-transform: uppercase;
-      font-family: 'Bebas Neue', system-ui, sans-serif;
-      font-size: clamp(140px, 30vw, 520px);
-      color: rgba(242,240,230,.92);
-      user-select: none;
-    }
-    .hero-word .fwrap {
-      position: relative; display: inline-block;
-      mix-blend-mode: screen;
-    }
-    .hero-the {
-      position: absolute; left: 0px; top: 26px;
-      transform: rotate(-90deg); transform-origin: left top;
-      font-size: 20px; letter-spacing: .18em; text-transform: uppercase;
-      color: rgba(242,240,230,.92); white-space: nowrap; pointer-events: none;
-    }
-    .hero-script {
-      position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%);
-      font-family: 'Dancing Script', cursive;
-      font-size: clamp(34px, 7vw, 96px); font-weight: 700;
-      color: #000000;
-      mix-blend-mode: normal;
-      text-transform: none; letter-spacing: 0;
-      pointer-events: none; white-space: nowrap;
-    }
-    .side-rail {
-      position: absolute; top: calc(56px + 18px); right: 18px;
-      display: flex; flex-direction: column; gap: 14px; z-index: 10;
-    }
-    .side-rail .rail {
-      writing-mode: vertical-rl; text-orientation: mixed;
-      font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
-      color: rgba(242,240,230,.65);
-    }
-    .hero-meta {
-      margin-top: 18px; width: min(1100px, 100%);
-      display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: end;
-    }
-    .hero-blurb {
-      max-width: 560px; font-size: 14px; line-height: 1.8;
-      color: rgba(10,10,10,.85); mix-blend-mode: overlay;
-    }
-    .hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-    .hero-pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 11px 18px; border-radius: 999px; font-size: 11px;
-      letter-spacing: .16em; text-transform: uppercase;
-      border: 1px solid rgba(10,10,10,.35); background: rgba(242,240,230,.14);
-      color: rgba(10,10,10,.85); transition: transform .15s, background .15s;
-    }
-    .hero-pill:hover { transform: translateY(-1px); background: rgba(242,240,230,.22); }
-    .hero-pill.primary { background: rgba(10,10,10,.72); color: rgba(242,240,230,.95); border-color: rgba(10,10,10,.2); }
-
-    /* ══════════════════════════════════════
-       THE DESK — centerpiece
-    ══════════════════════════════════════ */
-    .desk-section {
-      min-height: 100vh;
-      background: var(--dark);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 28px 100px;
-      /* desk surface texture */
-      background-image:
-        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(232,76,30,.04), transparent),
-        repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(255,255,255,.008) 80px, rgba(255,255,255,.008) 81px),
-        repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(255,255,255,.008) 80px, rgba(255,255,255,.008) 81px);
-    }
-    .desk-intro {
-      text-align: center;
-      margin-bottom: 72px;
-    }
-    .desk-intro-label {
-      font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
-      color: var(--cream3); margin-bottom: 16px;
-    }
-    .desk-intro-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      letter-spacing: .06em; color: var(--cream);
-      line-height: 1;
-    }
-    .desk-intro-title span {
-      font-family: 'Dancing Script', cursive;
-      font-size: .6em; color: var(--orange);
-      display: block; transform: rotate(-1.5deg);
-      letter-spacing: 0; margin-bottom: 4px;
-    }
-
-    /* The scattered desk surface */
-    .desk {
-      position: relative;
-      width: min(1100px, 100%);
-      height: 760px;
-      margin: 0 auto;
-      overflow: visible;
-    }
-
-    /* ── BASE ARTIFACT CARD ── */
-    .artifact {
-      position: absolute;
-      cursor: pointer;
-      transition: transform .3s cubic-bezier(.22,.68,0,1.4), box-shadow .3s ease, z-index 0s;
-      z-index: 1;
-      text-decoration: none;
-      color: inherit;
-    }
-    .artifact:hover {
-      z-index: 50;
-      transform: var(--hover-transform) !important;
-      box-shadow: 0 32px 80px rgba(0,0,0,.7), 0 8px 24px rgba(0,0,0,.4) !important;
-    }
-
-    /* ── PUNK FLYER — Research ── */
-    .flyer {
-      width: clamp(200px, 28vw, 300px);
-      background: #0a0a08;
-      border: 1px solid rgba(232,76,30,.3);
-      padding: 0;
-      top: 0%; left: 2%;
-      transform: rotate(-4deg);
-      --hover-transform: rotate(-1deg) translateY(-12px) scale(1.03);
-      box-shadow: 8px 12px 40px rgba(0,0,0,.6), 0 2px 8px rgba(0,0,0,.4);
-    }
-    .flyer-top {
-      background: var(--orange);
-      padding: 14px 16px 10px;
-    }
-    .flyer-top .f-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(10,10,10,.6); }
-    .flyer-top .f-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
-      line-height: .9; letter-spacing: .03em; color: #0a0a08;
-    }
-    .flyer-body { padding: 16px; }
-    .flyer-body .f-desc { font-size: 11px; line-height: 1.7; color: var(--cream3); margin-bottom: 14px; }
-    .flyer-body .f-bands {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: .85rem; letter-spacing: .08em;
-      color: var(--orange); line-height: 1.5;
-    }
-    .flyer-footer {
-      border-top: 1px solid rgba(232,76,30,.2);
-      padding: 10px 16px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .flyer-footer span { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--cream3); }
-    .flyer-footer .arr { color: var(--orange); }
-    /* xerox texture on flyer */
-    .flyer::before {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 10;
-    }
-
-    /* ── FIELD NOTES CARD — Writing/Zines ── */
-    .fieldnote {
-      width: clamp(220px, 30vw, 320px);
-      top: 12%; left: 30%;
-      transform: rotate(2.5deg);
-      --hover-transform: rotate(0.5deg) translateY(-12px) scale(1.03);
-      box-shadow: 6px 10px 36px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.3);
-    }
-    .fieldnote-inner {
-      background: #f0ece0;
-      padding: 20px 20px 24px;
-      position: relative;
-    }
-    /* lined paper */
-    .fieldnote-inner::before {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: repeating-linear-gradient(transparent, transparent 27px, rgba(100,80,60,.12) 27px, rgba(100,80,60,.12) 28px);
-      background-position: 0 44px;
-      pointer-events: none;
-    }
-    /* red margin line */
-    .fieldnote-inner::after {
-      content: '';
-      position: absolute; top: 0; bottom: 0; left: 36px;
-      border-left: 1px solid rgba(200,80,80,.25);
-      pointer-events: none;
-    }
-    .fn-tab {
-      background: var(--orange);
-      color: #0a0a08;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: .75rem; letter-spacing: .12em;
-      padding: 5px 14px;
-      display: inline-block;
-      margin-bottom: 14px;
-      margin-left: -20px;
-    }
-    .fn-title {
-      font-family: 'Dancing Script', cursive;
-      font-size: clamp(1.4rem, 2.5vw, 2rem);
-      color: #2a1f14; line-height: 1.2;
-      margin-bottom: 10px; position: relative; z-index: 1;
-    }
-    .fn-lines { position: relative; z-index: 1; padding-left: 16px; }
-    .fn-line { font-size: 12px; line-height: 1.9; color: #4a3f30; font-family: 'DM Sans', sans-serif; }
-    .fn-line::before { content: '—  '; color: rgba(200,80,80,.4); }
-    .fn-footer {
-      background: #e8e4d4;
-      padding: 10px 20px;
-      display: flex; justify-content: space-between; align-items: center;
-      border-top: 1px solid rgba(100,80,60,.15);
-    }
-    .fn-footer span { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #7a6e5e; }
-    .fn-footer .arr { color: var(--orange); }
-
-    /* ── STICKY NOTE — NAOS ── */
-    .sticky {
-      width: clamp(180px, 22vw, 240px);
-      top: 5%; right: 8%;
-      transform: rotate(3deg);
-      --hover-transform: rotate(1deg) translateY(-10px) scale(1.04);
-      box-shadow: 4px 8px 28px rgba(0,0,0,.5), 0 1px 4px rgba(0,0,0,.3);
-    }
-    .sticky-inner {
-      background: var(--amber);
-      padding: 18px 18px 22px;
-      position: relative;
-      /* sticky note top fold shadow */
-      background-image: linear-gradient(180deg, rgba(0,0,0,.06) 0%, transparent 20px);
-    }
-    .sticky-inner::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 4px;
-      background: rgba(0,0,0,.07);
-    }
-    .sticky-symbol {
-      font-size: 1.8rem; margin-bottom: 10px;
-      line-height: 1;
-    }
-    .sticky-title {
-      font-family: 'Dancing Script', cursive;
-      font-size: clamp(1.3rem, 2.2vw, 1.7rem);
-      color: #2a1f0a; line-height: 1.2; margin-bottom: 8px;
-    }
-    .sticky-desc { font-size: 11px; line-height: 1.7; color: #4a3c1a; }
-    .sticky-cta {
-      display: inline-block; margin-top: 14px;
-      font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-      color: #2a1f0a; border-bottom: 1px solid rgba(42,31,10,.3);
-      transition: border-color .2s;
-    }
-
-    /* ── ABOUT POLAROID — CV/About ── */
-    .polaroid {
-      width: clamp(160px, 20vw, 210px);
-      bottom: 4%; left: 18%;
-      transform: rotate(-2.5deg);
-      --hover-transform: rotate(-0.5deg) translateY(-10px) scale(1.04);
-      box-shadow: 5px 10px 32px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.3);
-    }
-    .polaroid-inner { background: #f0ece0; padding: 10px 10px 32px; }
-    .polaroid-photo {
-      width: 100%; aspect-ratio: 1;
-      /* SWAP: url('assets/you.jpg') center/cover */
-      background: linear-gradient(135deg, #1a1a16 0%, #2e2820 50%, #1a1a16 100%);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .polaroid-photo span { font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(242,240,230,.2); }
-    .polaroid-caption {
-      font-family: 'Dancing Script', cursive;
-      font-size: 1rem; color: #2a1f14;
-      text-align: center; margin-top: 10px;
-      display: block;
-    }
-    .polaroid-sub { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #7a6e5e; text-align: center; margin-top: 4px; display: block; }
-
-    /* ── TAPE pieces — decoration ── */
-    .tape {
-      position: absolute;
-      background: rgba(245,230,163,.18);
-      border: 1px solid rgba(245,230,163,.12);
-      backdrop-filter: blur(2px);
-      pointer-events: none;
-      z-index: 20;
-    }
-    .tape-h { height: 18px; width: 60px; }
-    .tape-v { height: 50px; width: 18px; }
-
-    /* ── MINI CARD — Ko-fi/Substack ── */
-    .mini-card {
-      width: clamp(140px, 18vw, 180px);
-      bottom: 2%; right: 20%;
-      transform: rotate(1.5deg);
-      --hover-transform: rotate(0deg) translateY(-8px) scale(1.04);
-      box-shadow: 4px 8px 24px rgba(0,0,0,.5);
-      cursor: default;
-    }
-    .mini-card-inner {
-      background: var(--charcoal);
-      border: 1px solid rgba(232,76,30,.25);
-      padding: 16px;
-    }
-    .mc-icon { font-size: 1.4rem; margin-bottom: 8px; display: block; }
-    .mc-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .06em; color: var(--cream); }
-    .mc-sub { font-size: 10px; color: var(--cream3); margin-top: 4px; }
-    .mc-links { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
-    .mc-link { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,.06); padding-top: 6px; }
-    .mc-link:hover { color: var(--cream); }
-
-    /* ── FLOATING LABELS — tape-style annotations ── */
-    .desk-annotation {
-      position: absolute;
-      font-family: 'Dancing Script', cursive;
-      font-size: clamp(.9rem, 1.5vw, 1.2rem);
-      color: rgba(232,76,30,.45);
-      pointer-events: none;
-      white-space: nowrap;
-    }
-
-    /* ══════════════════════════════════════
-       STATUS — thin minimal strip
-    ══════════════════════════════════════ */
-    .status {
-      background: var(--charcoal);
-      padding: 48px 28px;
-      border-top: 1px solid rgba(255,255,255,.05);
-    }
-    .status-inner {
-      max-width: 900px; margin: 0 auto;
-      display: grid; grid-template-columns: 140px 1fr; gap: 48px; align-items: start;
-    }
-    .s-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
-    .pulse-row { display: flex; align-items: center; gap: 8px; }
-    .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); animation: pulse 2.4s infinite; }
-    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(232,76,30,.6)} 70%{box-shadow:0 0 0 7px rgba(232,76,30,0)} 100%{box-shadow:0 0 0 0 rgba(232,76,30,0)} }
-    .pulse-text { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); }
-    .s-items { display: flex; flex-direction: column; }
-    .s-item { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
-    .s-item:last-child { border-bottom: none; }
-    .s-title { font-family: 'Lora', serif; font-size: .9rem; color: var(--cream); line-height: 1.4; }
-    .s-meta { font-size: .65rem; color: var(--cream3); margin-top: 3px; }
-    .badge { font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; flex-shrink: 0; }
-    .badge-on { background: rgba(232,76,30,.12); color: var(--orange); border: 1px solid rgba(232,76,30,.28); }
-    .badge-off { background: rgba(242,240,230,.05); color: var(--cream3); border: 1px solid rgba(242,240,230,.1); }
-
-    /* ══════════════════════════════════════
-       FOOTER STAMP
-    ══════════════════════════════════════ */
-    .stamp {
-      padding: 48px 28px 60px; background: var(--bg);
-      text-align: center; border-top: 1px solid rgba(255,255,255,.05);
-    }
-    .stamp .big { font-family: 'Bebas Neue', sans-serif; font-size: clamp(80px, 16vw, 280px); line-height: .82; letter-spacing: .06em; color: var(--orange); margin: 0; }
-    .stamp .outline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(60px, 12vw, 210px); line-height: .82; letter-spacing: .06em; color: transparent; -webkit-text-stroke: 2px var(--orange); margin: -8px 0 0; opacity: .35; }
-    .stamp-links { margin-top: 20px; display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
-    .stamp-links a { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--cream3); padding: 8px 12px; border-radius: 999px; transition: all .15s; }
-    .stamp-links a:hover { color: var(--cream); background: rgba(255,255,255,.06); }
-
-    /* ── REVEAL ── */
-    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s, transform .7s; }
-    .reveal.visible { opacity: 1; transform: none; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .desk { min-height: auto; }
-      .artifact { position: relative !important; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; transform: none !important; --hover-transform: translateY(-6px) scale(1.02); margin: 12px auto; display: block; width: 90%; max-width: 320px; }
-      .desk { display: flex; flex-direction: column; align-items: center; height: auto !important; }
-      .desk-annotation, .tape { display: none; }
-      .status-inner { grid-template-columns: 1fr; gap: 16px; }
-      .hero-meta { grid-template-columns: 1fr; }
-      .hero-ctas { justify-content: flex-start; }
-      .side-rail { display: none; }
-      .hero { min-height: 68vh; }
-      .hero-inner { padding: 18px 22px 28px; }
-    }
-    @media (max-width: 560px) {
-      .hero { min-height: auto; }
-      .hero-inner { padding: 16px 18px 24px; }
-      .hero-meta { margin-top: 12px; gap: 12px; }
-      .nav-links a:not(.cta) { display: none; }
-    }
-  </style>
+@media (min-width: 901px){
+  .shell.side-by-side{width:min(1100px, 100%);grid-template-columns:1.02fr .98fr;gap:28px;padding:40px 20px}
+}
+@media (max-width: 900px){
+  .shell{max-width:620px}
+  .panel{min-height:auto}
+  .left-body,.right-body{min-height:auto}
+}
+@media (max-width: 620px){
+  .topbar{grid-template-columns:1fr 120px}
+  .link-grid,.lower,.module-grid{grid-template-columns:1fr}
+  .link-col + .link-col,.lower-right,.module + .module{border-left:none;border-top:1px solid var(--line)}
+  .editorial{grid-template-columns:1fr}
+  .featured-main{order:1}
+  .featured-side{order:2}
+  .hero-card{padding-left:0;margin-top:18px}
+  .featured-main .image-box{order:1}
+  .featured-main .meta-row{order:2}
+  .featured-main{display:grid}
+  .link-chip{font-size:clamp(30px,9vw,48px)}
+}
+</style>
 </head>
-<body>
-
-<!-- NAV -->
-<nav class="nav" aria-label="Primary">
-  <a class="brand" href="#top">FERAL <span>ANTHRO</span></a>
-  <div class="nav-links">
-    <a href="#research">Research</a>
-    <a href="#desk">Work</a>
-    <a href="https://www.naosx.com" target="_blank" rel="noreferrer">NAOS</a>
-    <a href="/Resume_CV.pdf" class="cta" target="_blank" rel="noreferrer">CV</a>
-  </div>
-</nav>
-
-<!-- TOP TICKER -->
-<div class="ticker orange" style="padding-top:56px">
-  <div class="ticker-track">
-    <span>Cultural Anthropology</span><span>Troy University</span><span>Ethnographic Fieldwork</span>
-    <span>DC Punk Research</span><span>Mutual Aid</span><span>NAOS Astrology</span>
-    <span>Zine Publisher</span><span>USAF</span><span>Qualitative Methods</span>
-    <span>Cultural Anthropology</span><span>Troy University</span><span>Ethnographic Fieldwork</span>
-    <span>DC Punk Research</span><span>Mutual Aid</span><span>NAOS Astrology</span>
-    <span>Zine Publisher</span><span>USAF</span><span>Qualitative Methods</span>
-  </div>
-</div>
-
-<!-- ════════════ HERO ════════════ -->
-<header class="hero" id="top">
-  <div class="hero-photo"></div>
-  <div class="side-rail" aria-hidden="true">
-    <div class="rail">FIELDWORK · RESEARCH</div>
-    <div class="rail">FIELDNOTES · NAOS ASTROLOGY</div>
-  </div>
-  <div class="hero-inner">
-    <div>
-      <div class="hero-word" aria-label="The Feral Anthropologist">
-        <div class="hero-lockup">
-          <span class="fwrap">
-            <span class="hero-the">The</span>
-            FERAL
-          </span>
-          <span class="hero-script">Anthropologist</span>
+<body id="top">
+  <main class="main">
+    <div class="shell">
+      <section class="panel left">
+        <div class="topbar">
+          <div class="logo-center"><a href="/"><img src="Feral_Anthro_logo.jpg" alt="Feral Anthro Logo"></a></div>
+          <div class="topcell"><span class="mono">FERAL Anthropologist</span><span>◎</span></div>
+          <div class="topcell"><span></span><span class="iconline">×</span></div>
         </div>
-      </div>
-      <div class="hero-meta">
-        <p class="hero-blurb">
-          Graduate researcher at the edges of what institutions choose to document.
-          Studying how meaning gets made and transmitted — in punk venues and natal charts alike.
-        </p>
-        <div class="hero-ctas">
-          <a class="hero-pill primary" href="#desk">Enter</a>
-          <a class="hero-pill" href="https://www.naosx.com" target="_blank" rel="noreferrer">NAOS Astrology</a>
+        <div class="left-body">
+          <div class="menu-wrap">
+            <div class="link-stack">
+              <a class="link-chip" href="#top">Home</a>
+              <a class="link-chip" href="/research.html">Research</a>
+              <a class="link-chip" href="https://substack.com/@feralanthro" target="_blank" rel="noreferrer">Writing</a>
+              <a class="link-chip" href="/Resume_CV.pdf" target="_blank" rel="noreferrer">CV</a>
+              <a class="link-chip" href="#signals">Signals</a>
+              <a class="link-chip" href="mailto:feralanthroboi@gmail.com">Contact</a>
+            </div>
+            <span class="kicker">Link hub / outward routes ↓ scroll</span>
+          </div>
+          <div>
+            <div class="subcopy">A minimal gateway into the wider FERAL Anthropologist ecosystem — current research, Substack, CV, Instagram, Pinterest, and selected outward-facing work.</div>
+            <div class="link-grid">
+              <div class="link-col">
+                <div class="col-title">Primary</div>
+                <div class="link-list">
+                  <a href="/research.html">Research page</a>
+                  <a href="https://substack.com/@feralanthro" target="_blank" rel="noreferrer">Writing / Substack</a>
+                  <a href="/Resume_CV.pdf" target="_blank" rel="noreferrer">Curriculum Vitae</a>
+                  <a href="mailto:feralanthroboi@gmail.com">About / contact</a>
+                </div>
+              </div>
+              <div class="link-col">
+                <div class="col-title">Outward links</div>
+                <div class="link-list">
+                  <a href="https://instagram.com/feralanthro" target="_blank" rel="noreferrer">Instagram</a>
+                  <a href="https://pin.it/5YFCPfGzY" target="_blank" rel="noreferrer">Pinterest board</a>
+                  <a href="#signals">Latest signals</a>
+                  <a href="/research.html">Archive node</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</header>
+      </section>
 
-<!-- BOTTOM TICKER -->
-<div class="ticker dark">
-  <div class="ticker-track">
-    <span>Kevin Castaneda</span><span>Buko Buko</span><span>PinkHouse</span>
-    <span>Songbyrd DC</span><span>PieShop DC</span><span>Punk as Mutual Aid</span>
-    <span>Identity Transmission</span><span>Autonomy</span><span>Behavioral Norms</span>
-    <span>Kevin Castaneda</span><span>Buko Buko</span><span>PinkHouse</span>
-    <span>Songbyrd DC</span><span>PieShop DC</span><span>Punk as Mutual Aid</span>
-    <span>Identity Transmission</span><span>Autonomy</span><span>Behavioral Norms</span>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════
-     THE FIELD DESK
-══════════════════════════════════════ -->
-<section class="desk-section" id="desk">
-
-  <div class="desk-intro">
-    <div class="desk-intro-label">The work</div>
-    <div class="desk-intro-title">
-      <span>everything on the desk</span>
-      Field Notes
-    </div>
-  </div>
-
-  <div class="desk" id="research">
-
-    <!-- annotation 1 -->
-    <span class="desk-annotation" style="top:8%; left:28%; transform:rotate(-2deg)">current fieldwork →</span>
-
-    <!-- TAPE pieces -->
-    <div class="tape tape-h" style="top:-4px; left:22%; transform:rotate(-1deg); z-index:25;"></div>
-    <div class="tape tape-h" style="top:44%; right:15%; transform:rotate(2deg); z-index:25;"></div>
-    <div class="tape tape-v" style="bottom:12%; left:40%; transform:rotate(1deg); z-index:25;"></div>
-
-    <!-- PUNK FLYER → Research -->
-    <a href="research.html" class="artifact flyer" style="top:2%; left:3%;">
-      <div class="flyer-top">
-        <div class="f-label">Active Research · Troy University</div>
-        <div class="f-title">Punk as<br/>Mutual Aid</div>
-      </div>
-      <div class="flyer-body">
-        <p class="f-desc">Ethnographic study of DC's punk scene as intergenerational activist transmission. How communities pass down radical values through showing up.</p>
-        <div class="f-bands">
-          Kevin Castaneda<br/>
-          Buko Buko<br/>
-          PinkHouse<br/>
-          Songbyrd · PieShop DC
+      <section class="panel right" id="deeper-section">
+        <div class="entry-glow"></div>
+        <div class="topbar">
+          <div class="logo-center"><a href="/"><img src="Feral_Anthro_logo.jpg" alt="Feral Anthro Logo"></a></div>
+          <div class="topcell"><span>◎</span><span></span></div>
+          <div class="topcell"><span></span><span class="iconline">—</span></div>
         </div>
-      </div>
-      <div class="flyer-footer">
-        <span>Research →</span>
-        <span class="arr">↗</span>
-      </div>
-    </a>
-
-    <!-- FIELD NOTES CARD → Writing/Zines -->
-    <a href="https://substack.com/@feralanthro" class="artifact fieldnote" style="top:10%; left:32%;" target="_blank" rel="noreferrer">
-      <div class="fieldnote-inner">
-        <div class="fn-tab">Field Notes</div>
-        <div class="fn-title">Writing &amp; Zines</div>
-        <div class="fn-lines">
-          <div class="fn-line">Essays &amp; seminar papers</div>
-          <div class="fn-line">Field Notes zine series</div>
-          <div class="fn-line">8-page origami format</div>
-          <div class="fn-line">Academic &amp; public writing</div>
+        <div class="sticky-nav">
+          <div class="mini-brand">You chose to go deeper</div>
+          <div class="sticky-links">
+            <a href="https://substack.com/@feralanthro" target="_blank" rel="noreferrer">Article</a>
+            <a href="#map-module">GIS Map</a>
+            <a href="/research.html">Project</a>
+          </div>
         </div>
-      </div>
-      <div class="fn-footer">
-        <span>The Feral Anthropologist</span>
-        <span class="arr">→</span>
-      </div>
-    </a>
+        <div class="deep-intro">Below the link hub is a darker editorial layer for deeper work: articles, maps, projects, and modules that reward scrolling. This is where featured media can live.</div>
+        <div class="right-body">
+          <div class="editorial">
+            <a class="featured-main hero-card" href="https://feralfreddy.substack.com/p/hold-your-breath?r=jkdwf" target="_blank" rel="noreferrer">
+              <div class="image-box" style="background:linear-gradient(135deg,#2b2b2b,#0f0f0f)"></div>
+              <div class="meta-row">
+                <span>Hold Your Breath</span>
+                <span>Fieldwork / Substack</span>
+              </div>
+              <div class="prev-link">
+                <a href="https://feralfreddy.substack.com" target="_blank" rel="noreferrer">Previous Work →</a>
+              </div>
+            </a>
+            <div class="featured-side">
+              <div class="editorial-copy">
+                <p>Featured Project — the dominant research anchor in the deeper layer. This slot can introduce your main fieldwork project, methods, or public-facing explainer.</p>
+                <div class="small">01 — featured work</div>
+              </div>
+              <a class="hero-card" href="https://feralfreddy.substack.com/p/sacred-rebellion-astrology-as-alternative?r=jkdwf" target="_blank" rel="noreferrer">
+                <div class="image-box" style="background:linear-gradient(135deg,#2b2b2b,#0f0f0f)"></div>
+                <div class="meta-row">
+                  <span>Sacred Rebellion</span>
+                  <span>Essay / Substack</span>
+                </div>
+              </a>
+            </div>
+          </div>
 
-    <!-- STICKY NOTE → NAOS -->
-    <a href="https://www.naosx.com" class="artifact sticky" style="top:4%; right:6%;" target="_blank" rel="noreferrer">
-      <div class="sticky-inner">
-        <div class="sticky-symbol">♄</div>
-        <div class="sticky-title">NAOS Astrology</div>
-        <div class="sticky-desc">Humanistic astrology consultancy. Not prediction — a lens for locating yourself in time. Same question as fieldwork.</div>
-        <span class="sticky-cta">Book a reading →</span>
-      </div>
-    </a>
+          <div class="lower">
+            <div class="lower-left" id="signals">
+              <div class="star">✶</div>
+              <div class="lower-title">Latest Signals —</div>
+              <div class="lower-copy">Enough for now — this layer will grow as new essays, field notes, and visual work are added. Curated, not crowded.</div>
+            </div>
+            <div class="lower-right">
+              <div class="texture"></div>
+              <div class="lower-meta"><span>02 —</span><span>In research mode</span></div>
+            </div>
+          </div>
 
-    <!-- POLAROID → About/CV -->
-    <a href="/Resume_CV.pdf" class="artifact polaroid" style="bottom:2%; left:15%;" target="_blank" rel="noreferrer">
-      <div class="polaroid-inner">
-        <div class="polaroid-photo"><span>photo here</span></div>
-        <span class="polaroid-caption">About Me</span>
-        <span class="polaroid-sub">CV &amp; Background →</span>
-      </div>
-    </a>
-
-    <!-- MINI CARD → Links -->
-    <div class="artifact mini-card" style="bottom:0%; right:18%;">
-      <div class="mini-card-inner">
-        <span class="mc-icon">☕</span>
-        <div class="mc-title">Find me online</div>
-        <div class="mc-sub">Writing, zines &amp; updates</div>
-        <div class="mc-links">
-          <a href="https://substack.com/@feralanthro" class="mc-link" target="_blank" rel="noreferrer"><span>Substack</span><span>↗</span></a>
-          <a href="https://ko-fi.com/feralanthro" class="mc-link" target="_blank" rel="noreferrer"><span>Ko-fi</span><span>↗</span></a>
-          <a href="mailto:feralanthroboi@gmail.com" class="mc-link"><span>Contact</span><span>↗</span></a>
+          <div class="note">Scroll-based layout: homepage first, then a full-black editorial shift below. The second section feels earned — a deeper layer for readers who keep going.</div>
         </div>
-      </div>
+      </section>
     </div>
-
-  </div><!-- /desk -->
-</section>
-
-<!-- ══════════════════════════════════════
-     STATUS — minimal strip
-══════════════════════════════════════ -->
-<section class="status">
-  <div class="status-inner">
-    <div>
-      <div class="s-label">Right now</div>
-      <div class="pulse-row"><div class="pulse-dot"></div><span class="pulse-text">Live</span></div>
-    </div>
-    <div class="s-items">
-      <div class="s-item">
-        <div><div class="s-title">Punk as Mutual Aid — seminar paper</div><div class="s-meta">Troy University · In progress</div></div>
-        <span class="badge badge-on">Writing</span>
-      </div>
-      <div class="s-item">
-        <div><div class="s-title">Field Notes Zine — documentation practices</div><div class="s-meta">8-page origami format · In progress</div></div>
-        <span class="badge badge-on">Active</span>
-      </div>
-      <div class="s-item">
-        <div><div class="s-title">NAOS Astrology — open for bookings</div><div class="s-meta">Consultancy · Ongoing</div></div>
-        <span class="badge badge-on">Open</span>
-      </div>
-      <div class="s-item">
-        <div><div class="s-title">Graduate Program · Troy University</div><div class="s-meta">Cultural &amp; Forensic Anthropology · Active</div></div>
-        <span class="badge badge-off">Enrolled</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER STAMP -->
-<footer class="stamp">
-  <p class="big">FERAL</p>
-  <p class="outline">ANTHRO</p>
-  <div class="stamp-links">
-    <a href="#research">Research</a>
-    <a href="https://www.naosx.com" target="_blank" rel="noreferrer">NAOS</a>
-    <a href="https://substack.com/@feralanthro" target="_blank" rel="noreferrer">Writing</a>
-    <a href="/Resume_CV.pdf" target="_blank" rel="noreferrer">CV</a>
-    <a href="mailto:feralanthroboi@gmail.com">Contact</a>
-  </div>
-</footer>
-
+  </main>
 <script>
-  const desk = document.getElementById('desk');
-  const artifacts = Array.from(document.querySelectorAll('.artifact'));
-
-  artifacts.forEach((artifact) => {
-    artifact.dataset.baseTransform = artifact.style.transform || '';
-  });
-
-  if (desk && window.innerWidth > 900) {
-    desk.addEventListener('mousemove', (event) => {
-      const rect = desk.getBoundingClientRect();
-      const cx = (event.clientX - rect.left) / rect.width - 0.5;
-      const cy = (event.clientY - rect.top) / rect.height - 0.5;
-
-      artifacts.forEach((artifact, index) => {
-        if (artifact.matches(':hover')) {
-          return;
+  const deeperSection = document.getElementById('deeper-section');
+  if (deeperSection) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          deeperSection.classList.add('entered');
+        } else {
+          deeperSection.classList.remove('entered');
         }
-
-        const depth = 0.6 + (index % 3) * 0.2;
-        const baseTransform = artifact.dataset.baseTransform || '';
-        artifact.style.transition = 'transform .8s ease, box-shadow .3s ease';
-        artifact.style.transform = `${baseTransform} translate(${cx * 8 * depth}px, ${cy * 6 * depth}px)`;
       });
-    });
-
-    desk.addEventListener('mouseleave', () => {
-      artifacts.forEach((artifact) => {
-        artifact.style.transition = 'transform 1.2s ease, box-shadow .3s ease';
-        artifact.style.transform = artifact.dataset.baseTransform || '';
-      });
-    });
+    }, { threshold: 0.18 });
+    io.observe(deeperSection);
   }
 </script>
 </body>
