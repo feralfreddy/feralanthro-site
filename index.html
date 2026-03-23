@@ -471,7 +471,7 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
-      .desk { min-height: auto; }
+      .desk { min-height: auto; height: auto; }
       .artifact { position: relative !important; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; transform: none !important; --hover-transform: translateY(-6px) scale(1.02); margin: 12px auto; display: block; width: 90%; max-width: 320px; }
       .desk { display: flex; flex-direction: column; align-items: center; height: auto !important; }
       .desk-annotation, .tape { display: none; }
@@ -482,11 +482,37 @@
       .hero { min-height: 68vh; }
       .hero-inner { padding: 18px 22px 28px; }
     }
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: 1px solid rgba(255,255,255,.15);
+      color: var(--cream);
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 6px 10px;
+      line-height: 1;
+      border-radius: 4px;
+      transition: border-color .15s;
+    }
+    .nav-hamburger:hover { border-color: rgba(255,255,255,.4); }
+
     @media (max-width: 560px) {
       .hero { min-height: auto; }
       .hero-inner { padding: 16px 18px 24px; }
       .hero-meta { margin-top: 12px; gap: 12px; }
-      .nav-links a:not(.cta) { display: none; }
+      .nav-hamburger { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 56px; left: 0; right: 0;
+        flex-direction: column;
+        background: rgba(7,7,7,.98);
+        border-bottom: 1px solid rgba(255,255,255,.08);
+        padding: 8px 0;
+        gap: 0;
+      }
+      .nav-links a { padding: 12px 20px; border-radius: 0; }
+      .nav.nav-open .nav-links { display: flex; }
     }
   </style>
 </head>
@@ -495,9 +521,11 @@
 <!-- NAV -->
 <nav class="nav" aria-label="Primary">
   <a class="brand" href="#top">FERAL <span>ANTHRO</span></a>
+  <button class="nav-hamburger" aria-label="Toggle navigation" onclick="this.closest('nav').classList.toggle('nav-open')">☰</button>
   <div class="nav-links">
-    <a href="#research">Research</a>
-    <a href="#desk">Work</a>
+    <a href="research.html">Research</a>
+    <a href="writing.html">Writing</a>
+    <a href="zine.html">Field Notes</a>
     <a href="https://www.naosx.com" target="_blank" rel="noreferrer">NAOS</a>
     <a href="/Resume_CV.pdf" class="cta" target="_blank" rel="noreferrer">CV</a>
   </div>
@@ -604,7 +632,7 @@
     </a>
 
     <!-- FIELD NOTES CARD → Writing/Zines -->
-    <a href="https://substack.com/@feralanthro" class="artifact fieldnote" style="top:10%; left:32%;" target="_blank" rel="noreferrer">
+    <a href="writing.html" class="artifact fieldnote" style="top:10%; left:32%;">
       <div class="fieldnote-inner">
         <div class="fn-tab">Field Notes</div>
         <div class="fn-title">Writing &amp; Zines</div>
@@ -634,7 +662,7 @@
     <!-- POLAROID → About/CV -->
     <a href="/Resume_CV.pdf" class="artifact polaroid" style="bottom:2%; left:15%;" target="_blank" rel="noreferrer">
       <div class="polaroid-inner">
-        <div class="polaroid-photo"><span>photo here</span></div>
+        <div class="polaroid-photo"></div>
         <span class="polaroid-caption">About Me</span>
         <span class="polaroid-sub">CV &amp; Background →</span>
       </div>
@@ -692,9 +720,10 @@
   <p class="big">FERAL</p>
   <p class="outline">ANTHRO</p>
   <div class="stamp-links">
-    <a href="#research">Research</a>
+    <a href="research.html">Research</a>
+    <a href="writing.html">Writing</a>
+    <a href="zine.html">Field Notes</a>
     <a href="https://www.naosx.com" target="_blank" rel="noreferrer">NAOS</a>
-    <a href="https://substack.com/@feralanthro" target="_blank" rel="noreferrer">Writing</a>
     <a href="/Resume_CV.pdf" target="_blank" rel="noreferrer">CV</a>
     <a href="mailto:feralanthroboi@gmail.com">Contact</a>
   </div>

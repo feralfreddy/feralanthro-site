@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+/* Fonts loaded via <link> tags in each HTML file for better performance */
 
 :root {
   --bg: #0e0c07;
@@ -117,8 +117,43 @@ footer {
 footer a { color: var(--muted); text-decoration: none; }
 footer a:hover { color: var(--paper); }
 
+/* HAMBURGER TOGGLE */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--paper);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 6px 10px;
+  line-height: 1;
+  transition: border-color 0.15s;
+}
+.nav-toggle:hover { border-color: var(--paper); }
+
 @media (max-width: 768px) {
   nav { padding: 0 20px; }
   .nav-links { gap: 18px; }
   .nav-links a { font-size: 0.52rem; letter-spacing: 1.5px; }
+}
+
+@media (max-width: 640px) {
+  .nav-toggle { display: block; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 56px; left: 0; right: 0;
+    flex-direction: column;
+    background: rgba(14,12,7,0.98);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 0;
+    gap: 0;
+  }
+  .nav-links a {
+    padding: 12px 20px;
+    font-size: 0.58rem;
+    letter-spacing: 2px;
+  }
+  .nav-links a.active { border-bottom: none; padding-bottom: 12px; }
+  nav.nav-open .nav-links { display: flex; }
 }
